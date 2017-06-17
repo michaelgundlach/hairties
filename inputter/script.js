@@ -3,9 +3,18 @@
 function addRow(table, row) {
   var tr = $("<tr>");
   table.find("tbody").prepend(tr);
-  headers($("#mytable")).forEach(function(header) {
-    tr.append($("<td>").text(row[header.toLowerCase()]));
+  headers($("#cards_table")).forEach(function(header) {
+    header = header.toLowerCase();
+    tr.append($("<td>").addClass("col-" + header).text(row[header]));
   });
+  var delBtn = $("<input>", {type:"button", val: "X"});
+  delBtn.click(function() {
+    Cards.del(row['id'], function() {
+      tr.hide(function() { tr.remove(); });
+    });
+  });
+  var delTd = $("<td>").addClass("del").append(delBtn);
+  tr.append(delTd);
 }
 
 // The headers for the given table, in order.
@@ -13,17 +22,15 @@ function headers(table) {
   return table.find("thead tr td").map((i,node) => $(node).text()).get();
 }
 
-function loadTable() {
-  Cards.get_all(function(cards) {
-    $("#mytable tbody").html("");
-    cards.forEach(function(card) {
-      addRow($("#mytable"), card);
-    });
-  });
-}
 
 $(function() {
-  loadTable();
+  Cards.get_all(function(cards) {
+    $("#cards_table tbody").html("");
+    cards.forEach(function(card) {
+      addRow($("#cards_table"), card);
+      $("#pack_name").val(card.pack_name);
+    });
+  });
 
   $("#add").click(function() {
     var card = {
@@ -36,7 +43,14 @@ $(function() {
     Cards.add(card, function(newCard) {
       $("#new input:text").val("");
       $("#pack_name").val(newCard.pack_name);
-      addRow($("#mytable"), newCard);
+      addRow($("#cards_table"), newCard);
     });
+  });
+
+  $("#new input:text").keypress(function(e) {
+    if (e.keyCode === 13) {
+      $("#add").click();
+      $("#new input:first-child").focus();
+    }
   });
 });

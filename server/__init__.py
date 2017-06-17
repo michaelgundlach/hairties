@@ -72,3 +72,12 @@ def put_card(cardid):
     conn.commit()
     conn.close()
     return ""
+
+@app.route("/cards/<int:cardid>", methods=["DELETE"])
+def del_card(cardid):
+    sql = "DELETE FROM cards WHERE id=?"
+    conn, c = db()
+    c.execute("DELETE FROM cards WHERE id=?", (cardid,))
+    conn.commit()
+    conn.close()
+    return ""

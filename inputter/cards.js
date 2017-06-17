@@ -10,6 +10,12 @@ Cards = {
   },
 
   update: function(card, callback) {
-    $.put("/api/cards/" + card.id, JSON.stringify(card), callback);
+    $.ajax("/api/cards/" + card.id, 
+           {type: "PUT", data: JSON.stringify(card), success: callback});
+  },
+
+  del: function(cardid, callback) {
+    $.ajax("/api/cards/" + cardid, 
+           {type: "DELETE", success: callback});
   }
 }

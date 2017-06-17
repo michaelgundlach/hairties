@@ -1,3 +1,27 @@
+body {
+  font-family: arial;
+}
+
+#cards_table tbody tr:nth-child(odd) {
+  background: #eee;
+}
+
+#cards_table tbody tr:nth-child(even) {
+  background: #ccc;
+}
+
+#cards_table thead {
+  font-weight: bold;
+}
+
+thead {
+  font-size: 2em;
+}
+
+.col-han, .col-pinyin, .col-english {
+  font-size: 3em;
+}
+
 #new input {
   width: 100px;
 }
