@@ -4,7 +4,7 @@ function addRow(table, row) {
   var tr = $("<tr>");
   table.find("tbody").prepend(tr);
   headers($("#cards_table")).forEach(function(header) {
-    header = header.toLowerCase();
+    header = header.toLowerCase().replace(/ /g, '_');
     tr.append($("<td>").addClass("col-" + header).text(row[header]));
   });
   var delBtn = $("<input>", {type:"button", val: "X"});

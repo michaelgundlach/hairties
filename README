@@ -1,1 +1,5 @@
 Flashcard review app.
+
+server/ - Flask app.
+inputter/ - input website, like a spreadsheet, showing all cards.
+reviewer/ - review website, reviewing one card at a time.
