@@ -31,6 +31,9 @@ prettify_pinyin = (function() {
     for (var i = 0; i < syllables.length; i++){
       var syllable = syllables[i];
       var tone = parseInt(syllable[syllable.length-1]);
+      if (isNaN(tone)) {
+        continue;
+      }
       
       if (tone <= 0 || tone > 5) {
         console.error('invalid tone number:', tone, 'in', syllable);
