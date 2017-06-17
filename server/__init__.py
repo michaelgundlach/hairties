@@ -13,13 +13,27 @@ def db():
     conn.row_factory = sqlite3.Row
     return (conn, conn.cursor())
 
-def update_fields_sql(card):
-    """Return 'a=b, c=d, e=f' for the keys and values in the given |card|'s
+def card_input_to_row_dict(card):
+    """Convert card dict from user-inputed JSON, to a dict of keys and values
+    in database format."""
+    card['errors'] = unicode(repr(card['errors']))
+    return card
+
+def card_row_dict_to_output(row):
+    """Convert a sqlite3.Row from the 'cards' table to a dict ready to
+    jsonify to send to the user."""
+    card = dict(zip(row.keys(), row))
+    card['errors'] = eval(row['errors'] if 'errors' in row.keys() else [])
+    return card
+
+def update_fields_sql(row):
+    """Return 'a=b, c=d, e=f' for the keys and values in the given card's
     data dict.  Clean column names to protect against sqlinjection."""
     # TODO hard coded to han|pinyin|english|errors, maybe fine.
     # If we ever read column names from the card (aka unsafe user input),
     # be sure to convert colnames to ''.join(c for c in colname if c.isalnum())
-    return ("han=?,pinyin=?,english=?,pack_name=?,errors=?", (card['han'], card['pinyin'], card['english'], card['pack_name'], repr(card['errors'])))
+    return ("han=?,pinyin=?,english=?,pack_name=?,errors=?",
+            (row['han'], row['pinyin'], row['english'], row['pack_name'], row['errors']))
 
 
 @app.route("/cards/", methods=["GET"])
@@ -28,20 +42,19 @@ def cards():
     c.execute('SELECT * from cards')
     all_rows = c.fetchall()
     conn.close()
-    return jsonify([dict(zip(row.keys(), row)) for row in all_rows])
+    return jsonify([card_row_dict_to_output(row) for row in all_rows])
 
 @app.route("/cards/", methods=["POST"])
 def insert_card():
     card = request.get_json(force=True)
+    card['created_date'] = datetime.datetime.utcnow()
+    rowdata = card_input_to_row_dict(card)
     conn, c = db()
-    now = unicode(datetime.datetime.utcnow())
     sql = "INSERT INTO cards (han,pinyin,english,pack_name,errors,created_date) VALUES (?,?,?,?,?,?)"
-    vals = [card[k] for k in ['han', 'pinyin', 'english', 'pack_name']]
-    vals.append(unicode(repr(card['errors'])))
-    vals.append(now)
+    vals = [card[k] for k in ['han', 'pinyin', 'english', 'pack_name', 'errors', 'created_date']]
     c.execute(sql, vals)
+    card = card_row_dict_to_output(rowdata)
     card['id'] = c.lastrowid
-    card['created_date'] = now
     conn.commit()
     conn.close()
     return jsonify(card)
@@ -49,8 +62,9 @@ def insert_card():
 @app.route("/cards/<int:cardid>", methods=["PUT"])
 def put_card(cardid):
     card = request.get_json(force=True)
+    rowdata = card_input_to_row_dict(card)
     conn, c = db()
-    update_sql, params = update_fields_sql(card)
+    update_sql, params = update_fields_sql(rowdata)
     sql = "UPDATE cards SET {} WHERE id=?".format(update_sql)
     c.execute(sql, params + (cardid,))
     conn.commit()
