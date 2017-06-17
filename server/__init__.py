@@ -16,14 +16,16 @@ def db():
 def card_input_to_row_dict(card):
     """Convert card dict from user-inputed JSON, to a dict of keys and values
     in database format."""
-    card['errors'] = unicode(repr(card['errors']))
+    # Sanitize unsafe user input that we will eval later
+    errors = [int(error) for error in card.get('errors', [])]
+    card['errors'] = unicode(errors)
     return card
 
 def card_row_dict_to_output(row):
     """Convert a sqlite3.Row from the 'cards' table to a dict ready to
     jsonify to send to the user."""
     card = dict((k, row[k]) for k in row.keys())
-    card['errors'] = eval(row['errors'] if 'errors' in row.keys() else [])
+    card['errors'] = eval(row['errors'])
     return card
 
 def update_fields_sql(row):
