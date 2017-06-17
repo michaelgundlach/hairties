@@ -2,19 +2,27 @@
 <html>
   <head>
     <link rel="stylesheet" href="jquery.dynatable.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="jquery.dynatable.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
+    <div id="new">
+      Han: <input id="han">
+      Pinyin: <input id="pinyin">
+      English: <input id="english">
+      Pack name: <input id="pack_name">
+      <input type="submit" id="add" value="Add new card"/>
+    </div>
     <table id="mytable">
       <thead>
         <tr>
           <td>Han</td>
           <td>Pinyin</td>
           <td>English</td>
-          <td>Errors</td>
           <td>Pack_name</td>
+          <td>Errors</td>
           <td>Created_date</td>
           <td>id</td>
         </tr>

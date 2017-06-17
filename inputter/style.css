@@ -1,0 +1,11 @@
+#new input {
+  width: 100px;
+}
+
+#new input[type='submit'] {
+  width: 10em;
+}
+
+#new {
+  margin-bottom: 2em;
+}
