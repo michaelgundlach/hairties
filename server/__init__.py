@@ -22,7 +22,7 @@ def card_input_to_row_dict(card):
 def card_row_dict_to_output(row):
     """Convert a sqlite3.Row from the 'cards' table to a dict ready to
     jsonify to send to the user."""
-    card = dict(zip(row.keys(), row))
+    card = dict((k, row[k]) for k in row.keys())
     card['errors'] = eval(row['errors'] if 'errors' in row.keys() else [])
     return card
 
@@ -51,7 +51,7 @@ def insert_card():
     rowdata = card_input_to_row_dict(card)
     conn, c = db()
     sql = "INSERT INTO cards (han,pinyin,english,pack_name,errors,created_date) VALUES (?,?,?,?,?,?)"
-    vals = [card[k] for k in ['han', 'pinyin', 'english', 'pack_name', 'errors', 'created_date']]
+    vals = [rowdata[k] for k in ['han', 'pinyin', 'english', 'pack_name', 'errors', 'created_date']]
     c.execute(sql, vals)
     card = card_row_dict_to_output(rowdata)
     card['id'] = c.lastrowid
