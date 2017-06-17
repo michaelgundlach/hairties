@@ -35,7 +35,7 @@ $(function() {
   $("#add").click(function() {
     var card = {
       han: $("#han").val(),
-      pinyin: $("#pinyin").val(),
+      pinyin: prettify_pinyin($("#pinyin").val()),
       english: $("#english").val(),
       pack_name: $("#pack_name").val(),
       errors: []
