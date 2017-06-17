@@ -49,7 +49,7 @@ def cards():
 @app.route("/cards/", methods=["POST"])
 def insert_card():
     card = request.get_json(force=True)
-    card['created_date'] = datetime.datetime.utcnow()
+    card['created_date'] = unicode(datetime.datetime.utcnow())
     rowdata = card_input_to_row_dict(card)
     conn, c = db()
     sql = "INSERT INTO cards (han,pinyin,english,pack_name,errors,created_date) VALUES (?,?,?,?,?,?)"
