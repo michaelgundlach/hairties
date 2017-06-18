@@ -1,0 +1,33 @@
+.packs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.packlist {
+  /* Properties as a flex item */
+  flex-grow: 1;
+
+  /* Properties as a flex container */
+  display: flex;
+  flex-direction: column;
+}
+
+.pack {
+  /* TODO: style as a pack of notecards */
+  flex-grow: 1;
+  margin: 3px;
+  padding: 1em;
+  font-size: 1em;
+}
+
+div {
+  background: #ddd;
+  margin: 2px;
+}
+
+#virtual, #actual {
+  background: red;
+}
+
+body { font-size: 1em; }
