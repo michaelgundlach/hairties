@@ -9,24 +9,24 @@ CardViewer.__proto__ = {
     $(".packs").hide();
     $(".reviewer").show();
 
-    this.current.cards = cards;
-    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
-    this.current.rendererName = rendererName;
-    this.current.i = -1; // so reviewNextCard will set it to 0
+    this._current.cards = cards;
+    this._current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
+    this._current.rendererName = rendererName;
+    this._current.i = -1; // so reviewNextCard will set it to 0
 
     this.reviewNextCard();
   },
 
   // Display a card number |i| in the reviewer.
   reviewNextCard: function() {
-    this.current.i += 1;
-    if (this.current.card() === undefined) {
-      this.current.i = 0;
+    this._current.i += 1;
+    if (this._current.card() === undefined) {
+      this._current.i = 0;
     }
     var faces = $("<div>", {"class": "faces"});
-    var renderer = this.packRenderers[this.current.rendererName];
-    // Set 'this' to this.packRenderers inside the renderer
-    renderer.call(this.packRenderers, faces, this.current.card()).replaceAll(".faces");
+    var renderer = this._packRenderers[this._current.rendererName];
+    // Set 'this' to this._packRenderers inside the renderer
+    renderer.call(this._packRenderers, faces, this._current.card()).replaceAll(".faces");
     $("#controls-error-types").hide();
   },
 
@@ -36,20 +36,20 @@ CardViewer.__proto__ = {
   },
 
   addError: function(errorId) {
-    var card = this.current.card();
+    var card = this._current.card();
     card.errors.push(errorId);
     Cards.api.update(card, () => this.reviewNextCard());
   },
 
   clearErrors: function() {
-    var card = this.current.card();
+    var card = this._current.card();
     card.errors = [];
     Cards.api.update(card, () => this.reviewNextCard());
   },
 
 
   // quasi-global to hold info about our current study session.
-  current: {
+  _current: {
     card: function() { return this.cards[this.i]; },
 
     cards: [],
@@ -66,7 +66,7 @@ CardViewer.__proto__ = {
   //
   // Renderers are decorators on the jQuery element pointing to the <faces>
   // element being constructed.
-  packRenderers: {
+  _packRenderers: {
     basicFaces: function(faces, card) {
       // TODO: add han/pinyin/english
       faces.append(this._newFace("Han", card.han, {hidden:false}));
