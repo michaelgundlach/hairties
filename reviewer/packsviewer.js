@@ -3,7 +3,10 @@ PacksViewer.__proto__ = {
   showPacks: function(packs) {
     this.packs = packs;
     this.packs.forEach(pack => { 
-      $("#actual").append(this.buttonForPack(pack[0].pack_name, pack[0].pack_name));
+      var name = pack[0].pack_name;
+      var btn = $("<input>", { value: name, type: "button", "data-pack-name": name}).
+        addClass("pack").
+        appendTo("#actual");
     });
     $(".packs input.pack").click(e => this.showPack(e.target.dataset.packName));
 
@@ -12,12 +15,6 @@ PacksViewer.__proto__ = {
 
   // List of packs (which are lists of cards), loaded from the backend
   packs: undefined,
-
-  // Return an <input> you can click to review a pack.
-  buttonForPack: function(title, packName) {
-    return $("<input>", { value: title, type: "button", "data-pack-name": packName}).
-      addClass("pack");
-  },
 
   showPack: function(packName) {
     if (packName.indexOf("__") === 0)
