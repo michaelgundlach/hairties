@@ -1,5 +1,55 @@
 CardViewer = function() {}
 CardViewer.__proto__ = {
+  reviewCards: function(cards, rendererName) {
+    if (cards.length === 0) {
+      alert("Oops: nothing to review!");
+      return;
+    }
+
+    this.current.cards = cards;
+    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
+    this.current.i = 0;
+    this.current.rendererName = rendererName;
+
+    $(".packs").hide();
+    $(".reviewer").show();
+    this.reviewACard();
+  },
+
+  // Display a card in the reviewer.
+  reviewACard: function() {
+    var faces = $("<div>", {"class": "faces"});
+    var renderer = this.packRenderers[this.current.rendererName];
+    // Set 'this' to this.packRenderers inside the renderer
+    renderer.call(this.packRenderers, faces, this.current.card()).replaceAll(".faces");
+    $("#controls-error-types").hide();
+  },
+
+  reviewNext: function() {
+    this.current.i += 1;
+    if (this.current.card() === undefined) {
+      this.current.i = 0;
+    }
+    this.reviewACard();
+  },
+
+  closeReviewer: function() {
+    $(".reviewer").hide();
+    $(".packs").show();
+  },
+
+  addError: function(errorId) {
+    var card = this.current.card();
+    card.errors.push(errorId);
+    Cards.api.update(card, () => this.reviewNext());
+  },
+
+  clearErrors: function() {
+    var card = this.current.card();
+    card.errors = [];
+    Cards.api.update(card, () => this.reviewNext());
+  },
+
   // quasi-global to hold info about our current study session.
   current: {
     card: function() { return this.cards[this.i]; },
@@ -78,55 +128,6 @@ CardViewer.__proto__ = {
       return face.append(label).append(value);
     }
 
-  },
+  }
 
-  reviewCards: function(cards, rendererName) {
-    if (cards.length === 0) {
-      alert("Oops: nothing to review!");
-      return;
-    }
-
-    this.current.cards = cards;
-    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
-    this.current.i = 0;
-    this.current.rendererName = rendererName;
-
-    $(".packs").hide();
-    $(".reviewer").show();
-    this.reviewACard();
-  },
-
-  // Display a card in the reviewer.
-  reviewACard: function() {
-    var faces = $("<div>", {"class": "faces"});
-    var renderer = this.packRenderers[this.current.rendererName];
-    // Set 'this' to this.packRenderers inside the renderer
-    renderer.call(this.packRenderers, faces, this.current.card()).replaceAll(".faces");
-    $("#controls-error-types").hide();
-  },
-
-  reviewNext: function() {
-    this.current.i += 1;
-    if (this.current.card() === undefined) {
-      this.current.i = 0;
-    }
-    this.reviewACard();
-  },
-
-  closeReviewer: function() {
-    $(".reviewer").hide();
-    $(".packs").show();
-  },
-
-  addError: function(errorId) {
-    var card = this.current.card();
-    card.errors.push(errorId);
-    Cards.api.update(card, () => this.reviewNext());
-  },
-
-  clearErrors: function() {
-    var card = this.current.card();
-    card.errors = [];
-    Cards.api.update(card, () => this.reviewNext());
-  },
 };
