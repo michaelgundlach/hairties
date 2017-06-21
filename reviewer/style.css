@@ -53,15 +53,21 @@ div {
 }
 
 .faces {
-  font-size: 2em;
+  display: flex;
+  flex-direction: column;
 }
 
 .face {
   margin: 10px;
   border: 1px solid red;
-  width: 80%;
 }
-.face-label
+.face-label {
+  font-size: 1em;
+}
+.face-value {
+  font-size: 2em;
+}
+
 .face-mistake {
   color: red;
 }
