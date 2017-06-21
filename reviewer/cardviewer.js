@@ -1,4 +1,5 @@
-Reviewer = {
+Reviewer = function() {}
+Reviewer.__proto__ = {
   errorTypes: {
     1: "forgot pronunciation",
     2: "forgot tone",
@@ -17,22 +18,22 @@ Reviewer = {
   packRenderers: {
     basicFaces: function(faces, card) {
       // TODO: add han/pinyin/english
-      faces.append(Reviewer.newFace("Han", card.han, {hidden:false}));
-      faces.append(Reviewer.newFace("Pinyin", card.pinyin, {hidden:true}));
-      faces.append(Reviewer.newFace("English", card.english, {hidden:true}));
+      faces.append(this._newFace("Han", card.han, {hidden:false}));
+      faces.append(this._newFace("Pinyin", card.pinyin, {hidden:true}));
+      faces.append(this._newFace("English", card.english, {hidden:true}));
       return faces;
     },
     __all: function(faces, card) {
-      faces = Reviewer.packRenderers.basicFaces(faces, card);
-      faces.append(Reviewer.newFace("Pack", card.pack_name, {hidden:true, className:"face-pack"}));
+      faces = this.basicFaces(faces, card);
+      faces.append(this._newFace("Pack", card.pack_name, {hidden:true, className:"face-pack"}));
       return faces;
     },
     __multiple: function(faces, card) {
       // Does the same thing as __all
-      return Reviewer.packRenderers.__all(faces, card);
+      return this.__all(faces, card);
     },
     __wrongs: function(faces, card) {
-      faces = Reviewer.packRenderers.basicFaces(faces, card);
+      faces = this.basicFaces(faces, card);
       function mode(arr){
         return arr.concat().sort((a,b) =>
           arr.filter(v => v===a).length
@@ -41,38 +42,39 @@ Reviewer = {
       }
       var commonestError = mode(card.errors);
       var hint = Reviewer.errorTypes[commonestError];
-      faces.prepend(Reviewer.newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
+      faces.prepend(this._newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
       return faces;
     },
-  },
 
-  // Returns something like
-  //   <div class="face face-pack">
-  //     <div class="face-label">Pack name</div>
-  //     <div class="face-value obscured">words that I hate</div>
-  //   </div>
-  // Options include 'hidden' bool (is face-value div obscured?), and a
-  // 'className' for the face div.
-  newFace: function(label, answer, options) {
-    var face = $("<div>").addClass("face");
-    if (options && options.className) {
-      face.addClass(options.className);
-    }
-    var label = $("<div>", {
-      "class": "face-label",
-      text: label
-    });
-    var value = $("<div>", {
-      "class": "face-value",
-      text: answer
-    });
-    if (options && options.hidden) {
-      value.text("<???>");
-      value.click(function() {
-        value.text(answer);
+    // Helper function for renderers, returning something like
+    //   <div class="face face-pack">
+    //     <div class="face-label">Pack name</div>
+    //     <div class="face-value obscured">words that I hate</div>
+    //   </div>
+    // Options include 'hidden' bool (is face-value div obscured?), and a
+    // 'className' for the face div.
+    _newFace: function(label, answer, options) {
+      var face = $("<div>").addClass("face");
+      if (options && options.className) {
+        face.addClass(options.className);
+      }
+      var label = $("<div>", {
+        "class": "face-label",
+        text: label
       });
+      var value = $("<div>", {
+        "class": "face-value",
+        text: answer
+      });
+      if (options && options.hidden) {
+        value.text("<???>");
+        value.click(function() {
+          value.text(answer);
+        });
+      }
+      return face.append(label).append(value);
     }
-    return face.append(label).append(value);
+
   },
 
   // List of cards currently being reviewed
@@ -89,30 +91,32 @@ Reviewer = {
       return;
     }
 
-    Reviewer.REVIEW_CARDS = cards;
-    Reviewer.REVIEW_CARDS.sort(() => Math.random() - 0.5); // inefficient shuffle
-    Reviewer.CURRENT_CARD = 0;
-    Reviewer.RENDERER = Reviewer.packRenderers[rendererName];
+    this.REVIEW_CARDS = cards;
+    this.REVIEW_CARDS.sort(() => Math.random() - 0.5); // inefficient shuffle
+    this.CURRENT_CARD = 0;
+    // Have to wrap in a new-style function so that within a packRenderer,
+    // 'this' refers to packRenderers and not Reviewer or worse
+    this.RENDERER = (faces, card) => Reviewer.packRenderers[rendererName](faces, card);
 
     $(".packs").hide();
     $(".reviewer").show();
-    Reviewer.reviewACard();
+    this.reviewACard();
   },
 
   // Display a card in the reviewer.
   reviewACard: function() {
-    var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
+    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
     var faces = $("<div>", {"class": "faces"});
-    faces = Reviewer.RENDERER(faces, card);
+    faces = this.RENDERER(faces, card);
     $(".faces-container").html(faces);
   },
 
   reviewNext: function() {
-    Reviewer.CURRENT_CARD += 1;
-    if (Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD] === undefined) {
-      Reviewer.CURRENT_CARD = 0;
+    this.CURRENT_CARD += 1;
+    if (this.REVIEW_CARDS[this.CURRENT_CARD] === undefined) {
+      this.CURRENT_CARD = 0;
     }
-    Reviewer.reviewACard();
+    this.reviewACard();
   },
 
   closeReviewer: function() {
@@ -121,14 +125,14 @@ Reviewer = {
   },
 
   addError: function(errorId) {
-    var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
+    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
     card.errors.push(errorId);
-    Cards.api.update(card, () => Reviewer.reviewNext());
+    Cards.api.update(card, () => this.reviewNext());
   },
 
   clearErrors: function() {
-    var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
+    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
     card.errors = [];
-    Cards.api.update(card, () => Reviewer.reviewNext());
+    Cards.api.update(card, () => this.reviewNext());
   },
 };
