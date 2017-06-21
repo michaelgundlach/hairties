@@ -1,11 +1,5 @@
 PacksViewer = function() {}
 PacksViewer.__proto__ = {
-  virtualPacks: [
-    {title: "All Cards", name: "__all"},
-    {title: "Multiple Packs (TODO)", name: "__multiple"},
-    {title: "Cards With Errors", name: "__wrongs"}
-  ],
-
   showPacks: function(packs) {
     this.packs = packs;
     this.packs.forEach(pack => { 
