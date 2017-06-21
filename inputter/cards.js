@@ -8,7 +8,6 @@ Cards = {
     },
 
     // Add a new card, calling callback(card) with the newly created card.
-    // TODO how to handle caching adds?!?
     add: function(card, callback) {
       var data = JSON.stringify(card);
       $.ajax("/api/cards/",
@@ -30,6 +29,37 @@ Cards = {
   },
 
   // Helper functions
+
+  // Assume Cards will be used with intermittent network connectivity.  Cache
+  // writes for when we're online, and cache reads for when we're offline.
+  enable_caching: function() {
+    Cards.__cachingApi.__wrappedApi = Cards.api;
+    Cards.api = Cards.__cachingApi;
+    Cards.api.__initialize();
+  },
+
+  // See Cards.api for basic descriptions, except that this one caches reads
+  // offline, and queues writes for when we're online.
+  __cachingApi: {
+    get_all: function(callback) {
+      console.log("TODO: caching");
+      Cards.api.__wrappedApi.get_all(callback);
+    },
+    add: function(card, callback) {
+      alert("Adding new cards in Cards.enable_caching() mode is not supported.");
+    },
+    update: function(card, callback) {
+      console.log("TODO: caching");
+      Cards.api.__wrappedApi.update(card, callback);
+    },
+    del: function(cardid, callback) {
+      console.log("TODO: caching");
+      Cards.api.__wrappedApi.del(cardid, callback);
+    },
+    __initialize: function() {
+      console.log("TODO: caching");
+    }
+  },
 
   // Returns [pack, pack, pack] where each pack is [card, card, card].
   // All cards in a pack have the same .pack_name.
