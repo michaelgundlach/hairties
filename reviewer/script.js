@@ -60,7 +60,7 @@ PacksViewer.__proto__ = {
 };
 
 $(function() {
-  $("#controls-next").click(e => CardViewer.reviewNext());
+  $("#controls-next").click(e => CardViewer.reviewNextCard());
   $("#controls-close").click(e => CardViewer.closeReviewer());
   $("#controls-clearerrors").click(e => CardViewer.clearErrors());
   $("#controls-error").click(e => $("#controls-error-types").show());

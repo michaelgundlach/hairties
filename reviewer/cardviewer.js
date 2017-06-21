@@ -6,31 +6,28 @@ CardViewer.__proto__ = {
       return;
     }
 
-    this.current.cards = cards;
-    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
-    this.current.i = 0;
-    this.current.rendererName = rendererName;
-
     $(".packs").hide();
     $(".reviewer").show();
-    this.reviewACard();
+
+    this.current.cards = cards;
+    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
+    this.current.rendererName = rendererName;
+    this.current.i = -1; // so reviewNextCard will set it to 0
+
+    this.reviewNextCard();
   },
 
-  // Display a card in the reviewer.
-  reviewACard: function() {
+  // Display a card number |i| in the reviewer.
+  reviewNextCard: function() {
+    this.current.i += 1;
+    if (this.current.card() === undefined) {
+      this.current.i = 0;
+    }
     var faces = $("<div>", {"class": "faces"});
     var renderer = this.packRenderers[this.current.rendererName];
     // Set 'this' to this.packRenderers inside the renderer
     renderer.call(this.packRenderers, faces, this.current.card()).replaceAll(".faces");
     $("#controls-error-types").hide();
-  },
-
-  reviewNext: function() {
-    this.current.i += 1;
-    if (this.current.card() === undefined) {
-      this.current.i = 0;
-    }
-    this.reviewACard();
   },
 
   closeReviewer: function() {
@@ -41,21 +38,22 @@ CardViewer.__proto__ = {
   addError: function(errorId) {
     var card = this.current.card();
     card.errors.push(errorId);
-    Cards.api.update(card, () => this.reviewNext());
+    Cards.api.update(card, () => this.reviewNextCard());
   },
 
   clearErrors: function() {
     var card = this.current.card();
     card.errors = [];
-    Cards.api.update(card, () => this.reviewNext());
+    Cards.api.update(card, () => this.reviewNextCard());
   },
+
 
   // quasi-global to hold info about our current study session.
   current: {
     card: function() { return this.cards[this.i]; },
 
-    cards: undefined,
-    i: undefined,
+    cards: [],
+    i: 0,
     rendererName: undefined
   },
 
