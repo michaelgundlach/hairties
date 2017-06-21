@@ -1,3 +1,23 @@
+body { 
+  font-size: 1em; 
+  font-family: arial;
+  background: black;
+}
+
+/* So it doesn't flicker while we load */
+body {
+  display: none;
+}
+
+div {
+  background: #ddd;
+  margin: 2px;
+}
+
+
+
+/* PacksViewer */
+
 .packs {
   display: flex;
   flex-direction: row;
@@ -21,39 +41,33 @@
   font-size: 1em;
 }
 
-div {
-  background: #ddd;
-  margin: 2px;
-}
-
 #virtual, #actual {
   background: red;
 }
 
-body { 
-font-size: 1em; 
-font-family: arial;
-background: black;
+
+/* CardViewer */
+
+.reviewer {
+  display: none;
 }
 
-.faces-container {
-  margin-bottom: 2em;
+.faces {
   font-size: 2em;
-  border-bottom: 3px solid black;
 }
 
 .face {
-  border-bottom: 1px solid black;
+  margin: 10px;
+  border: 1px solid red;
+  width: 80%;
 }
+.face-label
 .face-mistake {
   color: red;
 }
 .face-pack {
   color: blue;
 }
-.reviewer {
-  display: none;
-}
-body {
-  display: none;
+.controls {
+  border: 2px solid black;
 }

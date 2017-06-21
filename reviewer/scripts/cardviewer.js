@@ -97,7 +97,7 @@ CardViewer.__proto__ = {
     },
 
     // Helper function for renderers, returning something like
-    //   <div class="face face-pack">
+    //   <div class="face face-pack">  (or face-<whatever special classname I gave it>)
     //     <div class="face-label">Pack name</div>
     //     <div class="face-value">words that I hate</div>
     //   </div>
