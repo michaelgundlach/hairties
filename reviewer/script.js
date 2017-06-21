@@ -37,12 +37,12 @@ PacksViewer.__proto__ = {
       // TODO: select multiple
       which = (card) => true;
     }
-    Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which), packName);
+    CardViewer.reviewCards(Cards.withinPacks(PACKS).filter(which), packName);
   },
 
   showActualPack: function(packName) {
     var which = (card) => card.pack_name === packName;
-    Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which), "basicFaces");
+    CardViewer.reviewCards(Cards.withinPacks(PACKS).filter(which), "basicFaces");
   },
 
   // Assumes PACKS global variable has been loaded.
@@ -60,13 +60,13 @@ PacksViewer.__proto__ = {
 };
 
 $(function() {
-  $("#review-next").click(() => Reviewer.reviewNext());
-  $("#review-close").click(() => Reviewer.closeReviewer());
-  $("#review-err1").click(() => Reviewer.addError(1));
-  $("#review-err2").click(() => Reviewer.addError(2));
-  $("#review-err3").click(() => Reviewer.addError(3));
-  $("#review-err4").click(() => Reviewer.addError(4));
-  $("#review-clearerrors").click(() => Reviewer.clearErrors());
+  $("#review-next").click(() => CardViewer.reviewNext());
+  $("#review-close").click(() => CardViewer.closeReviewer());
+  $("#review-err1").click(() => CardViewer.addError(1));
+  $("#review-err2").click(() => CardViewer.addError(2));
+  $("#review-err3").click(() => CardViewer.addError(3));
+  $("#review-err4").click(() => CardViewer.addError(4));
+  $("#review-clearerrors").click(() => CardViewer.clearErrors());
 
   $(".reviewer, .packs").hide();
 

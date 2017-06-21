@@ -1,5 +1,5 @@
-Reviewer = function() {}
-Reviewer.__proto__ = {
+CardViewer = function() {}
+CardViewer.__proto__ = {
   errorTypes: {
     1: "forgot pronunciation",
     2: "forgot tone",
@@ -41,7 +41,7 @@ Reviewer.__proto__ = {
         ).pop();
       }
       var commonestError = mode(card.errors);
-      var hint = Reviewer.errorTypes[commonestError];
+      var hint = CardViewer.errorTypes[commonestError];
       faces.prepend(this._newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
       return faces;
     },
@@ -95,8 +95,8 @@ Reviewer.__proto__ = {
     this.REVIEW_CARDS.sort(() => Math.random() - 0.5); // inefficient shuffle
     this.CURRENT_CARD = 0;
     // Have to wrap in a new-style function so that within a packRenderer,
-    // 'this' refers to packRenderers and not Reviewer or worse
-    this.RENDERER = (faces, card) => Reviewer.packRenderers[rendererName](faces, card);
+    // 'this' refers to packRenderers and not CardViewer or worse
+    this.RENDERER = (faces, card) => CardViewer.packRenderers[rendererName](faces, card);
 
     $(".packs").hide();
     $(".reviewer").show();
