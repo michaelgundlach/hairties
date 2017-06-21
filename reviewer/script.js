@@ -8,15 +8,12 @@ PacksViewer.__proto__ = {
 
   showPacks: function(packs) {
     this.packs = packs;
-    this.virtualPacks.forEach(pack => {
-      $("#virtual").append(this.buttonForPack(pack.title, pack.name));
-    });
-
     this.packs.forEach(pack => { 
       $("#actual").append(this.buttonForPack(pack[0].pack_name, pack[0].pack_name));
     });
+    $(".packs input.pack").click(e => this.showPack(e.target.dataset.packName));
 
-    $(".packs").show();
+    $("body").show();
   },
 
   // List of packs (which are lists of cards), loaded from the backend
@@ -24,9 +21,8 @@ PacksViewer.__proto__ = {
 
   // Return an <input> you can click to review a pack.
   buttonForPack: function(title, packName) {
-    return $("<input>", {value: title, type: "button"}).
-      addClass("pack").
-      click(() => this.showPack(packName));
+    return $("<input>", { value: title, type: "button", "data-pack-name": packName}).
+      addClass("pack");
   },
 
   showPack: function(packName) {
@@ -64,8 +60,6 @@ $(function() {
   $("#controls-clearerrors").click(e => CardViewer.clearErrors());
   $("#controls-error").click(e => $("#controls-error-types").show());
   $("input:button.error").click(e => CardViewer.addError(e.target.dataset.errorId));
-
-  $(".reviewer, .packs").hide();
 
   Cards.enable_caching();
 

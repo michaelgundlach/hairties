@@ -100,9 +100,9 @@ CardViewer.__proto__ = {
     // Helper function for renderers, returning something like
     //   <div class="face face-pack">
     //     <div class="face-label">Pack name</div>
-    //     <div class="face-value obscured">words that I hate</div>
+    //     <div class="face-value">words that I hate</div>
     //   </div>
-    // Options include 'hidden' bool (is face-value div obscured?), and a
+    // Options include 'hidden' bool (is the answer obscured?), and a
     // 'className' for the face div.
     _newFace: function(label, answer, options) {
       var face = $("<div>").addClass("face");
