@@ -5,16 +5,17 @@ PacksViewer.__proto__ = {
   showPacksFor: function(cards) {
     this.cards = cards;
 
-    var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
-    var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
-    var packs = Cards.groupedByPack(cards, cardCompare, packCompare);
-
-    packs.forEach(pack => { 
-      var name = pack[0].pack_name;
-      var btn = $("<input>", { value: name, type: "button", "data-pack-name": name}).
-        addClass("pack").
-        appendTo("#actual");
-    });
+    // Add a button for each pack name, in most-recently-added-a-card order
+    var dup = {}; // duplicates, for unique-ing in filter() below
+    cards.
+      sort((card1,card2) => card1.created_date > card2.created_date ? -1 : 1).
+      map(card => card.pack_name).
+      filter(name => { if (name in dup) return false; dup[name] = 1; return true; }).
+      forEach(name => { 
+        var btn = $("<input>", { value: name, type: "button", "data-pack-name": name}).
+          addClass("pack").
+          appendTo("#actual");
+      });
     $(".packs input.pack").click(e => this.showPack(e.target.dataset.packName));
 
     $("body").show();
