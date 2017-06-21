@@ -1,10 +1,20 @@
 CardViewer = function() {}
 CardViewer.__proto__ = {
-  // These customize the look of the flash card depending on its context.  The
-  // basicFaces renderer adds han/pinyin/english faces.  Other renderers are more
-  // funky.  The __all renderer, for example, adds a small hidden "pack name"
-  // face, as a clue to the han meaning; and the __wrongs renderer adds an
-  // unhidden "here's what you tend to get wrong" face.
+  // quasi-global to hold info about our current study session.
+  current: {
+    card: function() { return this.cards[this.i]; },
+
+    cards: undefined,
+    i: undefined,
+    rendererName: undefined
+  },
+
+  // These render the flash card to HTML, customizing the look of the card
+  // depending on its context.  The basicFaces renderer adds han/pinyin/english
+  // faces.  Other renderers are more funky.  The __all renderer, for example,
+  // adds a small hidden "pack name" face, as a clue to the han meaning; and
+  // the __wrongs renderer adds an unhidden "here's what you tend to get wrong"
+  // face.
   //
   // Renderers are decorators on the jQuery element pointing to the <faces>
   // element being constructed.
@@ -70,26 +80,16 @@ CardViewer.__proto__ = {
 
   },
 
-  // List of cards currently being reviewed
-  REVIEW_CARDS: undefined,
-  // Index into REVIEW_CARDS currently being reviewed
-  CURRENT_CARD: undefined,
-  // Renders card to HTML
-  // TODO: you can do it prettier than with a global
-  RENDERER: function(faces, card) {},
-
   reviewCards: function(cards, rendererName) {
     if (cards.length === 0) {
       alert("Oops: nothing to review!");
       return;
     }
 
-    this.REVIEW_CARDS = cards;
-    this.REVIEW_CARDS.sort(() => Math.random() - 0.5); // inefficient shuffle
-    this.CURRENT_CARD = 0;
-    // Have to wrap in a new-style function so that within a packRenderer,
-    // 'this' refers to packRenderers and not CardViewer or worse
-    this.RENDERER = (faces, card) => this.packRenderers[rendererName](faces, card);
+    this.current.cards = cards;
+    this.current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
+    this.current.i = 0;
+    this.current.rendererName = rendererName;
 
     $(".packs").hide();
     $(".reviewer").show();
@@ -98,16 +98,17 @@ CardViewer.__proto__ = {
 
   // Display a card in the reviewer.
   reviewACard: function() {
-    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
     var faces = $("<div>", {"class": "faces"});
-    this.RENDERER(faces, card).replaceAll(".faces");
+    var renderer = this.packRenderers[this.current.rendererName];
+    // Set 'this' to this.packRenderers inside the renderer
+    renderer.call(this.packRenderers, faces, this.current.card()).replaceAll(".faces");
     $("#controls-error-types").hide();
   },
 
   reviewNext: function() {
-    this.CURRENT_CARD += 1;
-    if (this.REVIEW_CARDS[this.CURRENT_CARD] === undefined) {
-      this.CURRENT_CARD = 0;
+    this.current.i += 1;
+    if (this.current.card() === undefined) {
+      this.current.i = 0;
     }
     this.reviewACard();
   },
@@ -118,13 +119,13 @@ CardViewer.__proto__ = {
   },
 
   addError: function(errorId) {
-    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
+    var card = this.current.card();
     card.errors.push(errorId);
     Cards.api.update(card, () => this.reviewNext());
   },
 
   clearErrors: function() {
-    var card = this.REVIEW_CARDS[this.CURRENT_CARD];
+    var card = this.current.card();
     card.errors = [];
     Cards.api.update(card, () => this.reviewNext());
   },
