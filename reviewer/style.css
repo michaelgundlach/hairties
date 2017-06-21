@@ -51,6 +51,9 @@ background: black;
 .face-pack {
   color: blue;
 }
-.obscured {
-  visibility: hidden;
+.reviewer {
+  display: none;
+}
+body {
+  display: none;
 }

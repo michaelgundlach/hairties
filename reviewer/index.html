@@ -5,28 +5,42 @@
     <title>Hairties reviewer</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="cards.js"></script>
-    <script src="cardviewer.js"></script>
-    <script src="script.js"></script>
+    <script src="scripts/cards.js"></script>
+    <script src="scripts/cardviewer.js"></script>
+    <script src="scripts/packsviewer.js"></script>
+    <script src="scripts/script.js"></script>
   </head>
   <body>
     <div class="packs">
       <div id="virtual" class="packlist">
+        <input type="button" class="pack"
+               value="All Cards" data-pack-name="__all" />
+        <input type="button" class="pack"
+               value="Multiple Packs(TODO)" data-pack-name="__multiple" />
+        <input type="button" class="pack"
+               value="Cards With Errors" data-pack-name="__wrongs" />
       </div>
       <div id="actual" class="packlist">
       </div>
     </div>
     <div class="reviewer">
-      <div class="faces-container">
+      <div class="faces">
       </div>
       <div class="controls">
-        <input type="button" id="review-next" value="Next"/>
-        <input type="button" id="review-close" value="<<"/>
-        <input type="button" id="review-err1" value="Err1"/>
-        <input type="button" id="review-err2" value="Err2"/>
-        <input type="button" id="review-err3" value="Err3"/>
-        <input type="button" id="review-err4" value="Err4"/>
-        <input type="button" id="review-clearerrors" value="Clear Errors"/>
+        <input type="button" id="controls-close" value="<<"/>
+        <input type="button" id="controls-next" value="Right"/>
+        <input type="button" id="controls-error" value="Wrong"/>
+        <div id="controls-error-types">
+          <input type="button" class="error" value="wrong pronunciation"
+                 data-error-id="1" data-error-hint="forgot pronunciation"/>
+          <input type="button" class="error" value="wrong tone"
+                 data-error-id="2" data-error-hint="forgot tone"/>
+          <input type="button" class="error" value="wrong English"
+                 data-error-id="3" data-error-hint="forgot English meaning"/>
+          <input type="button" class="error" value="confused with another character"
+                 data-error-id="4" data-error-hint="confused with another character"/>
+        </div>
+        <input type="button" id="controls-clearerrors" value="Clear Errors"/>
       </div>
     </div>
   </body>

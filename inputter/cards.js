@@ -59,34 +59,5 @@ Cards = {
     __initialize: function() {
       console.log("TODO: caching");
     }
-  },
-
-  // Returns [pack, pack, pack] where each pack is [card, card, card].
-  // All cards in a pack have the same .pack_name.
-  // Sort order unspecified unless cardCompare() and packCompare() functions
-  // are given to pass to sort().
-  groupedByPack: function(cards, cardCompare, packCompare) {
-    if (cardCompare === undefined || packCompare === undefined) {
-      cardCompare = (a,b) => 0;
-      packCompare = (a,b) => 0;
-    }
-
-    // group cards by pack name
-    var packs = cards.reduce(function(acc, card) {
-      (acc[card.pack_name] = acc[card.pack_name] || []).push(card);
-      return acc;
-    }, {});
-    packs = Object.values(packs);
-    packs.forEach(function(pack) {
-      pack.sort(cardCompare);
-    });
-    packs.sort(packCompare);
-    return packs;
-  },
-
-  // Flatten the list of packs of cards into a list of cards.
-  withinPacks: function(packs) {
-    // This is just a one-level flatten.
-    return Array.prototype.concat.apply([], packs);
   }
 }
