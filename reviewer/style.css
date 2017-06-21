@@ -32,6 +32,25 @@ div {
 
 body { 
 font-size: 1em; 
+font-family: arial;
 background: black;
 }
 
+.faces-container {
+  margin-bottom: 2em;
+  font-size: 2em;
+  border-bottom: 3px solid black;
+}
+
+.face {
+  border-bottom: 1px solid black;
+}
+.face-mistake {
+  color: red;
+}
+.face-pack {
+  color: blue;
+}
+.obscured {
+  visibility: hidden;
+}

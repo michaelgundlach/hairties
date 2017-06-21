@@ -1,15 +1,9 @@
 Reviewer = {
-  // The card faces, in order, to show on all cards.  Some virtual packs
-  // e.g. the pack of all cards with errors may show some virtual faces
-  // too e.g. the most common error that you make.
-  // TODO delete unused?
-  // basicFaces: [ "han", "pinyin", "english" ],
-
   errorTypes: {
-    "p": "forgot pronunciation",
-    "t": "forgot tone",
-    "m": "forgot English meaning",
-    "c": "confused with another character"
+    1: "forgot pronunciation",
+    2: "forgot tone",
+    3: "forgot English meaning",
+    4: "confused with another character"
   },
 
   // These customize the look of the flash card depending on its context.  The
@@ -29,7 +23,8 @@ Reviewer = {
       return faces;
     },
     __all: function(faces, card) {
-      faces.append(Reviewer.newFace("Pack", card.packName, {hidden:true, className:"face-pack"}));
+      faces = Reviewer.packRenderers.basicFaces(faces, card);
+      faces.append(Reviewer.newFace("Pack", card.pack_name, {hidden:true, className:"face-pack"}));
       return faces;
     },
     __multiple: function(faces, card) {
@@ -37,6 +32,7 @@ Reviewer = {
       return Reviewer.packRenderers.__all(faces, card);
     },
     __wrongs: function(faces, card) {
+      faces = Reviewer.packRenderers.basicFaces(faces, card);
       function mode(arr){
         return arr.concat().sort((a,b) =>
           arr.filter(v => v===a).length
@@ -44,7 +40,7 @@ Reviewer = {
         ).pop();
       }
       var commonestError = mode(card.errors);
-      var hint = errorTypes[commonestError];
+      var hint = Reviewer.errorTypes[commonestError];
       faces.prepend(Reviewer.newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
       return faces;
     },
@@ -57,7 +53,7 @@ Reviewer = {
   //   </div>
   // Options include 'hidden' bool (is face-value div obscured?), and a
   // 'className' for the face div.
-  newFace: function(label, value, options) {
+  newFace: function(label, answer, options) {
     var face = $("<div>").addClass("face");
     if (options && options.className) {
       face.addClass(options.className);
@@ -68,10 +64,13 @@ Reviewer = {
     });
     var value = $("<div>", {
       "class": "face-value",
-      text: value
+      text: answer
     });
     if (options && options.hidden) {
-      value.addClass("obscured");
+      value.text("<???>");
+      value.click(function() {
+        value.text(answer);
+      });
     }
     return face.append(label).append(value);
   },
@@ -80,8 +79,11 @@ Reviewer = {
   REVIEW_CARDS: undefined,
   // Index into REVIEW_CARDS currently being reviewed
   CURRENT_CARD: undefined,
+  // Renders card to HTML
+  // TODO: you can do it prettier than with a global
+  RENDERER: function(faces, card) {},
 
-  reviewCards: function(cards) {
+  reviewCards: function(cards, rendererName) {
     if (cards.length === 0) {
       alert("Oops: nothing to review!");
       return;
@@ -90,6 +92,7 @@ Reviewer = {
     Reviewer.REVIEW_CARDS = cards;
     Reviewer.REVIEW_CARDS.sort(() => Math.random() - 0.5); // inefficient shuffle
     Reviewer.CURRENT_CARD = 0;
+    Reviewer.RENDERER = Reviewer.packRenderers[rendererName];
 
     $(".packs").hide();
     $(".reviewer").show();
@@ -99,8 +102,9 @@ Reviewer = {
   // Display a card in the reviewer.
   reviewACard: function() {
     var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
-    var faces = $(".faces").html("");
-    faces = Reviewer.packRenderers.basicFaces(faces, card);
+    var faces = $("<div>", {"class": "faces"});
+    faces = Reviewer.RENDERER(faces, card);
+    $(".faces-container").html(faces);
   },
 
   reviewNext: function() {
@@ -116,9 +120,9 @@ Reviewer = {
     $(".packs").show();
   },
 
-  addError: function(i) {
+  addError: function(errorId) {
     var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
-    card.errors.push(i);
+    card.errors.push(errorId);
     Cards.api.update(card, () => Reviewer.reviewNext());
   },
 

@@ -34,12 +34,12 @@ function showVirtualPack(packName) {
     // TODO: select multiple
     which = (card) => true;
   }
-  Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which));
+  Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which), packName);
 }
 
 function showActualPack(packName) {
   var which = (card) => card.pack_name === packName;
-  Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which));
+  Reviewer.reviewCards(Cards.withinPacks(PACKS).filter(which), "basicFaces");
 }
 
 // Assumes PACKS global variable has been loaded.
