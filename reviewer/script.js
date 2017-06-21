@@ -95,13 +95,13 @@ Reviewer = {
   addError: function(i) {
     var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
     card.errors.push(i);
-    Cards.update(card, () => Reviewer.reviewNext());
+    Cards.api.update(card, () => Reviewer.reviewNext());
   },
 
   clearErrors: function() {
     var card = Reviewer.REVIEW_CARDS[Reviewer.CURRENT_CARD];
     card.errors = [];
-    Cards.update(card, () => Reviewer.reviewNext());
+    Cards.api.update(card, () => Reviewer.reviewNext());
   },
 };
 
@@ -129,7 +129,7 @@ $(function() {
 
   $(".reviewer, .packs").hide();
 
-  Cards.get_all(function(cards) {
+  Cards.api.get_all(function(cards) {
     var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
     var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
     PACKS = Cards.groupedByPack(cards, cardCompare, packCompare);

@@ -9,7 +9,7 @@ function addRow(table, row) {
   });
   var delBtn = $("<input>", {type:"button", val: "X"});
   delBtn.click(function() {
-    Cards.del(row['id'], function() {
+    Cards.api.del(row['id'], function() {
       tr.hide(function() { tr.remove(); });
     });
   });
@@ -24,7 +24,7 @@ function headers(table) {
 
 
 $(function() {
-  Cards.get_all(function(cards) {
+  Cards.api.get_all(function(cards) {
     $("#cards_table tbody").html("");
     cards.forEach(function(card) {
       addRow($("#cards_table"), card);
@@ -40,7 +40,7 @@ $(function() {
       pack_name: $("#pack_name").val(),
       errors: []
     };
-    Cards.add(card, function(newCard) {
+    Cards.api.add(card, function(newCard) {
       $("#new input:text").val("");
       $("#pack_name").val(newCard.pack_name);
       addRow($("#cards_table"), newCard);

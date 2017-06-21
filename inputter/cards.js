@@ -1,25 +1,35 @@
 Cards = {
-  get_all: function(callback) {
-    $.get("/api/cards/", callback);
+
+  api: {
+    // Call callback(cards) with a list of all cards.
+    get_all: function(callback) {
+      $.ajax("/api/cards/",
+             {type: "GET", success: callback});
+    },
+
+    // Add a new card, calling callback(card) with the newly created card.
+    // TODO how to handle caching adds?!?
+    add: function(card, callback) {
+      var data = JSON.stringify(card);
+      $.ajax("/api/cards/",
+             {type: "POST", data: data, success: callback});
+    },
+
+    // Update |card|, calling callback() upon success.
+    update: function(card, callback) {
+      var data = JSON.stringify(card);
+      $.ajax("/api/cards/" + card.id,
+             {type: "PUT", data: data, success: callback});
+    },
+
+    // Delete the given card id, calling callback() upon success.
+    del: function(cardid, callback) {
+      $.ajax("/api/cards/" + cardid,
+             {type: "DELETE", success: callback});
+    }
   },
 
-  add: function(card, callback) {
-    $.post("/api/cards/", JSON.stringify(card), function(newCard) {
-      callback(newCard);
-    }, "json");
-  },
-
-  update: function(card, callback) {
-    $.ajax("/api/cards/" + card.id, 
-           {type: "PUT", data: JSON.stringify(card), success: callback});
-  },
-
-  del: function(cardid, callback) {
-    $.ajax("/api/cards/" + cardid, 
-           {type: "DELETE", success: callback});
-  },
-
-  /* TODO: move API functions into Cards.api.* ? */
+  // Helper functions
 
   // Returns [pack, pack, pack] where each pack is [card, card, card].
   // All cards in a pack have the same .pack_name.
