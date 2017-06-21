@@ -82,11 +82,5 @@ Cards = {
     });
     packs.sort(packCompare);
     return packs;
-  },
-
-  // Flatten the list of packs of cards into a list of cards.
-  withinPacks: function(packs) {
-    // This is just a one-level flatten.
-    return Array.prototype.concat.apply([], packs);
   }
 }

@@ -3,11 +3,13 @@ PacksViewer.__proto__ = {
 
   // Make a clickable button for each virtual and actual pack available.
   showPacksFor: function(cards) {
+    this.cards = cards;
+
     var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
     var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
-    this.packs = Cards.groupedByPack(cards, cardCompare, packCompare);
+    var packs = Cards.groupedByPack(cards, cardCompare, packCompare);
 
-    this.packs.forEach(pack => { 
+    packs.forEach(pack => { 
       var name = pack[0].pack_name;
       var btn = $("<input>", { value: name, type: "button", "data-pack-name": name}).
         addClass("pack").
@@ -18,8 +20,8 @@ PacksViewer.__proto__ = {
     $("body").show();
   },
 
-  // List of packs (which are lists of cards), loaded from the backend
-  packs: undefined,
+  // All cards, loaded from the backend
+  cards: undefined,
 
   showPack: function(packName) {
     if (packName.indexOf("__") === 0)
@@ -41,11 +43,11 @@ PacksViewer.__proto__ = {
       // TODO: select multiple
       which = (card) => true;
     }
-    CardViewer.reviewCards(Cards.withinPacks(this.packs).filter(which), packName);
+    CardViewer.reviewCards(this.cards.filter(which), packName);
   },
 
   showActualPack: function(packName) {
     var which = (card) => card.pack_name === packName;
-    CardViewer.reviewCards(Cards.withinPacks(this.packs).filter(which), "basicFaces");
+    CardViewer.reviewCards(this.cards.filter(which), "basicFaces");
   }
 };
