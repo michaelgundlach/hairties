@@ -1,21 +1,5 @@
 CardViewer = function() {}
 CardViewer.__proto__ = {
-  errorTypes: {
-    1: "forgot pronunciation",
-    2: "forgot tone",
-    3: "forgot English meaning",
-    4: "confused with another character"
-  },
-
-  buildErrorControls: function(container) {
-    var errorTypes = this.errorTypes;
-    Object.keys(errorTypes).forEach(i => {
-      $("<input>", {type: "button", value: errorTypes[i]}).
-        click(e => CardViewer.addError(i)).
-        appendTo(container);
-    });
-  },
-
   // These customize the look of the flash card depending on its context.  The
   // basicFaces renderer adds han/pinyin/english faces.  Other renderers are more
   // funky.  The __all renderer, for example, adds a small hidden "pack name"
@@ -50,7 +34,7 @@ CardViewer.__proto__ = {
         ).pop();
       }
       var commonestError = mode(card.errors);
-      var hint = CardViewer.errorTypes[commonestError];
+      var hint = $("input:button.error[data-error-id="+commonestError+"]").data("errorHint");
       faces.prepend(this._newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
       return faces;
     },
@@ -116,8 +100,7 @@ CardViewer.__proto__ = {
   reviewACard: function() {
     var card = this.REVIEW_CARDS[this.CURRENT_CARD];
     var faces = $("<div>", {"class": "faces"});
-    faces = this.RENDERER(faces, card);
-    $(".faces-container").html(faces);
+    this.RENDERER(faces, card).replaceAll(".faces");
     $("#controls-error-types").hide();
   },
 

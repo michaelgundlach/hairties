@@ -64,7 +64,7 @@ $(function() {
   $("#controls-close").click(e => CardViewer.closeReviewer());
   $("#controls-clearerrors").click(e => CardViewer.clearErrors());
   $("#controls-error").click(e => $("#controls-error-types").show());
-  CardViewer.buildErrorControls($("#controls-error-types"));
+  $("input:button.error").click(e => CardViewer.addError(e.target.dataset.errorId));
 
   $(".reviewer, .packs").hide();
 
