@@ -14,11 +14,11 @@ CardViewer.__proto__ = {
     this._current.rendererName = rendererName;
     this._current.i = -1; // so reviewNextCard will set it to 0
 
-    this.reviewNextCard();
+    this._reviewNextCard();
   },
 
   // Display a card number |i| in the reviewer.
-  reviewNextCard: function() {
+  _reviewNextCard: function() {
     this._current.i += 1;
     if (this._current.card() === undefined) {
       this._current.i = 0;
@@ -30,21 +30,21 @@ CardViewer.__proto__ = {
     $("#controls-error-types").hide();
   },
 
-  closeReviewer: function() {
+  _closeReviewer: function() {
     $(".reviewer").hide();
     $(".packs").show();
   },
 
-  addError: function(errorId) {
+  _addError: function(errorId) {
     var card = this._current.card();
     card.errors.push(errorId);
-    Cards.api.update(card, () => this.reviewNextCard());
+    Cards.api.update(card, () => this._reviewNextCard());
   },
 
-  clearErrors: function() {
+  _clearErrors: function() {
     var card = this._current.card();
     card.errors = [];
-    Cards.api.update(card, () => this.reviewNextCard());
+    Cards.api.update(card, () => this._reviewNextCard());
   },
 
 
@@ -68,7 +68,6 @@ CardViewer.__proto__ = {
   // element being constructed.
   _packRenderers: {
     basicFaces: function(faces, card) {
-      // TODO: add han/pinyin/english
       faces.append(this._newFace("Han", card.han, {hidden:false}));
       faces.append(this._newFace("Pinyin", card.pinyin, {hidden:true}));
       faces.append(this._newFace("English", card.english, {hidden:true}));
@@ -129,3 +128,11 @@ CardViewer.__proto__ = {
   }
 
 };
+
+$(function() {
+  $("#controls-next").click(e => CardViewer._reviewNextCard());
+  $("#controls-close").click(e => CardViewer._closeReviewer());
+  $("#controls-clearerrors").click(e => CardViewer._clearErrors());
+  $("#controls-error").click(e => $("#controls-error-types").show());
+  $("input:button.error").click(e => CardViewer._addError(e.target.dataset.errorId));
+});
