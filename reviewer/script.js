@@ -6,7 +6,7 @@ PacksViewer.__proto__ = {
     {title: "Cards With Errors", name: "__wrongs"}
   ],
 
-  loadPacksList: function(packs) {
+  showPacks: function(packs) {
     this.packs = packs;
     this.virtualPacks.forEach(pack => {
       $("#virtual").append(this.buttonForPack(pack.title, pack.name));
@@ -73,6 +73,6 @@ $(function() {
     var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
     var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
     var packs = Cards.groupedByPack(cards, cardCompare, packCompare);
-    PacksViewer.loadPacksList(packs);
+    PacksViewer.showPacks(packs);
   });
 });
