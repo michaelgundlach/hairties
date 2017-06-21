@@ -1,7 +1,12 @@
 PacksViewer = function() {}
 PacksViewer.__proto__ = {
-  showPacks: function(packs) {
-    this.packs = packs;
+
+  // Make a clickable button for each virtual and actual pack available.
+  showPacksFor: function(cards) {
+    var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
+    var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
+    this.packs = Cards.groupedByPack(cards, cardCompare, packCompare);
+
     this.packs.forEach(pack => { 
       var name = pack[0].pack_name;
       var btn = $("<input>", { value: name, type: "button", "data-pack-name": name}).
