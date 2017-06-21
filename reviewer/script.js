@@ -60,11 +60,11 @@ PacksViewer.__proto__ = {
 };
 
 $(function() {
-  $("#review-next").click(e => CardViewer.reviewNext());
-  $("#review-close").click(e => CardViewer.closeReviewer());
-  $("#review-clearerrors").click(e => CardViewer.clearErrors());
-  $("#review-error").click(e => $("#review-error-types").show());
-  CardViewer.buildErrorControls($("#review-error-types"));
+  $("#controls-next").click(e => CardViewer.reviewNext());
+  $("#controls-close").click(e => CardViewer.closeReviewer());
+  $("#controls-clearerrors").click(e => CardViewer.clearErrors());
+  $("#controls-error").click(e => $("#controls-error-types").show());
+  CardViewer.buildErrorControls($("#controls-error-types"));
 
   $(".reviewer, .packs").hide();
 

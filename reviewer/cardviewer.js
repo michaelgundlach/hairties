@@ -118,7 +118,7 @@ CardViewer.__proto__ = {
     var faces = $("<div>", {"class": "faces"});
     faces = this.RENDERER(faces, card);
     $(".faces-container").html(faces);
-    $("#review-error-types").hide();
+    $("#controls-error-types").hide();
   },
 
   reviewNext: function() {
