@@ -1,14 +1,26 @@
-// List of packs (which are lists of cards), loaded from the backend
-PACKS = [];
-
 PacksViewer = function() {}
 PacksViewer.__proto__ = {
-
   virtualPacks: [
     {title: "All Cards", name: "__all"},
     {title: "Multiple Packs (TODO)", name: "__multiple"},
     {title: "Cards With Errors", name: "__wrongs"}
   ],
+
+  loadPacksList: function(packs) {
+    this.packs = packs;
+    this.virtualPacks.forEach(pack => {
+      $("#virtual").append(this.buttonForPack(pack.title, pack.name));
+    });
+
+    this.packs.forEach(pack => { 
+      $("#actual").append(this.buttonForPack(pack[0].pack_name, pack[0].pack_name));
+    });
+
+    $(".packs").show();
+  },
+
+  // List of packs (which are lists of cards), loaded from the backend
+  packs: undefined,
 
   // Return an <input> you can click to review a pack.
   buttonForPack: function(title, packName) {
@@ -37,25 +49,12 @@ PacksViewer.__proto__ = {
       // TODO: select multiple
       which = (card) => true;
     }
-    CardViewer.reviewCards(Cards.withinPacks(PACKS).filter(which), packName);
+    CardViewer.reviewCards(Cards.withinPacks(this.packs).filter(which), packName);
   },
 
   showActualPack: function(packName) {
     var which = (card) => card.pack_name === packName;
-    CardViewer.reviewCards(Cards.withinPacks(PACKS).filter(which), "basicFaces");
-  },
-
-  // Assumes PACKS global variable has been loaded.
-  loadPacksList: function() {
-    this.virtualPacks.forEach(pack => {
-      $("#virtual").append(this.buttonForPack(pack.title, pack.name));
-    });
-
-    PACKS.forEach(pack => { 
-      $("#actual").append(this.buttonForPack(pack[0].pack_name, pack[0].pack_name));
-    });
-
-    $(".packs").show();
+    CardViewer.reviewCards(Cards.withinPacks(this.packs).filter(which), "basicFaces");
   }
 };
 
@@ -73,7 +72,7 @@ $(function() {
   Cards.api.get_all(function(cards) {
     var cardCompare = (c1, c2) => (c1.created_date < c2.created_date);
     var packCompare = (p1, p2) => cardCompare(p1[0], p2[0]);
-    PACKS = Cards.groupedByPack(cards, cardCompare, packCompare);
-    PacksViewer.loadPacksList();
+    var packs = Cards.groupedByPack(cards, cardCompare, packCompare);
+    PacksViewer.loadPacksList(packs);
   });
 });
