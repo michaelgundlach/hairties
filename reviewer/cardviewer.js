@@ -96,7 +96,7 @@ CardViewer.__proto__ = {
     this.CURRENT_CARD = 0;
     // Have to wrap in a new-style function so that within a packRenderer,
     // 'this' refers to packRenderers and not CardViewer or worse
-    this.RENDERER = (faces, card) => CardViewer.packRenderers[rendererName](faces, card);
+    this.RENDERER = (faces, card) => this.packRenderers[rendererName](faces, card);
 
     $(".packs").hide();
     $(".reviewer").show();
