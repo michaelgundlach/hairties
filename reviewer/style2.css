@@ -149,13 +149,16 @@ html,body {
 }
 
 /* obscured stuff is marked thus */
-.obscured {
+.face.obscured {
   border: 5px dashed black;
   color: gray;
   font-style: italic;
+  border-radius: 1em;
+  background: white;
 }
-/* stuff that was obscured loses the above styles but retains the below. */
-[data-answer] {
+/* revealed stuff looks like this */
+.face:not(.obscured)[data-answer] {
+  border: 5px dashed white;
   border-radius: 1em;
   background: white;
 }
