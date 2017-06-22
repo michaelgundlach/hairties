@@ -1,0 +1,184 @@
+body { 
+  font-family: arial;
+  background: red;
+}
+
+/* So it doesn't flicker while we load */
+body {
+  display: none;
+}
+
+
+
+/* PacksViewer */
+
+.packs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.packlist {
+  /* Properties as a flex item */
+  flex-grow: 1;
+
+  /* Properties as a flex container */
+  display: flex;
+  flex-direction: column;
+}
+
+.pack {
+  /* TODO: style as a pack of notecards */
+  flex-grow: 1;
+  margin: 3px;
+  padding: 1em;
+  font-size: 1em;
+}
+
+#virtual, #actual {
+  background: red;
+}
+
+
+/* CardViewer */
+.reviewer {
+  display: none;
+}
+
+
+/* TODO temp colors and margins */
+div { 
+  margin-left: 3px; margin-right: 3px;
+  padding-left: 8px; padding-right: 8px;
+}
+.reviewer {
+  background:yellow;
+}
+.card {
+  background: purple;
+}
+.card-top-half {
+  background: #48f;
+}
+.card-bottom-half {
+  background: white;
+}
+.controls {
+  background: orange;
+}
+.controls > * {
+  background: #fd0;
+}
+/* END temp colors and margins */
+
+/* Make reviewer 90% width and height of screen */
+html,body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reviewer {
+  height: 90%;
+  width: 90%;
+}
+
+/* Controls get a fixed height; card fills the rest of the reviewer */
+.reviewer {
+  display: flex; /* for letting .card fill non-.controls height */
+  flex-direction: column;
+}
+.card {
+  flex-grow: 1;
+}
+.controls {
+  height: 2in; /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
+}
+
+/* Card top and bottom halfs split the available height */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+.card-top-half {
+  flex-grow: 6;
+}
+.card-bottom-half {
+  flex-grow: 4;
+}
+
+/* Faces are centered in the card */
+.card-top-half, .card-bottom-half {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Controls items go left to right */
+.controls > * {
+  display: flex;
+  flex-direction: row;
+
+}
+
+
+/* Card is rounded on top and separated from the controls*/
+.card-top-half {
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
+}
+.card {
+  margin-bottom: 20px;
+}
+
+/* *********** Face stylin ************ */
+
+/* Face text is centered and easy to read */
+.card {
+  font-size: 50px;
+}
+.face {
+  text-align: center;
+}
+
+/* Han is bigger */
+#face-han {
+  font-size: 2em;
+}
+
+/* obscured stuff is marked thus */
+.obscured {
+  border: 5px dashed black;
+  color: gray;
+  font-style: italic;
+}
+/* stuff that was obscured loses the above styles but retains the below. */
+[data-answer] {
+  border-radius: 1em;
+  background: white;
+}
+
+/* Faces have spaces around them */
+.face {
+  margin: 20px;
+  width: 80%;
+}
+
+/* Warning is pretty */
+#face-hint {
+  background: #d44;
+}
+
+/* Pack name at top right */
+.card {
+  position: relative;
+}
+#face-pack_name {
+  position: absolute;
+  font-size: .5em;
+  width: 40%;
+  right: 10px;
+  top: 10px;
+}
