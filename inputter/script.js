@@ -43,6 +43,12 @@ $(function() {
   });
 
   $("#add").click(function() {
+    // Make sure we don't already have it
+    var dups = $(".col-han:contains('" + $("#han").val() + "')");
+    if (dups.length > 0) {
+      alert("Already entered (id " + dups.eq(0).parent().find(".col-id").text() + ")");
+      return;
+    }
     var card = {
       han: $("#han").val(),
       pinyin: prettify_pinyin($("#pinyin").val()),
