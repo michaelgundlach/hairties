@@ -47,16 +47,25 @@ body {
   background: #328b95;
 }
 .card-bottom-half {
-  background: #eee;
+  background: #c5c2bd;
 }
 .controls-section input[type="button"] {
-  background: #998;
+  background: #3e8d39;
+}
+.controls-section input[type="button"].controls-clear-errors {
+  background: #619da4;
+}
+.controls-section input[type="button"].controls-wrong,
+#error-types-section input[type="button"]
+{
+  background: #cc3434;
 }
 [data-answer] {
   background: white;
 }
 #face-hint {
   background: #d44;
+  color: #333;
 }
 .face.obscured {
   color: gray;
@@ -108,28 +117,31 @@ html,body {
   align-items: center;
 }
 
-/* Controls items go left to right */
+/* Controls items go left to right and are spread out */
 .controls-section {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-around;
 }
 
-/* Control buttons are huge squares with wrapping text */
+/* Control buttons are rounded, as wide as possible, with wrapping text */
 .controls-section {
   height: 100%;
 }
 .controls input[type="button"] {
+  border-radius: .5em;
   height: 1.5in; /* adjust this in sync with .controls height above */
-  width: 1.5in;
-  font-size: 2em;
+  width: 100%;
+  margin-left: 1%; margin-right: 1%;
+  font-size: 3em;
   word-wrap: break-word;
   white-space: normal;
 }
 
-/* Reveal All is even huger */
-input[type="button"].controls-reveal-all {
-  width: 100%;
+/* Errors have smaller text to fit on buttons */
+.controls #error-types-section input[type="button"] {
+  font-size: 2em;
 }
 
 /* Card is rounded on top and bottom and separated from the controls*/
@@ -185,9 +197,10 @@ input[type="button"].controls-reveal-all {
   width: 80%;
 }
 
-/* Warning is rounded */
+/* Warning is rounded, italic, and a little taller */
 #face-hint {
   border-radius: .3em;
+  height: 1.5em;
 }
 
 /* Pack name at top right */

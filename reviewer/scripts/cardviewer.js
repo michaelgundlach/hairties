@@ -112,7 +112,7 @@ CardViewer.__proto__ = {
       }
       var commonestError = mode(card.errors);
       var hint = $("input:button.error[data-error-id="+commonestError+"]").data("errorHint");
-      $top.prepend(this._newFace("Warning: " + hint, "face-hint"));
+      $top.prepend(this._newFace(hint, "face-hint"));
     },
 
     // If answer is not undefined, returns a .obscured face with the data-answer element
