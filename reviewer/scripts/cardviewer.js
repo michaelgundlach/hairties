@@ -23,11 +23,14 @@ CardViewer.__proto__ = {
     if (this._current.card() === undefined) {
       this._current.i = 0;
     }
-    var faces = $("<div>", {"class": "faces"});
+    var $el = $("<div>", {"class": "card"}).
+      append($("<div>", {"class": "card-top-half"})).
+      append($("<div>", {"class": "card-bottom-half"}));
     var renderer = this._packRenderers[this._current.rendererName];
     // Set 'this' to this._packRenderers inside the renderer
-    renderer.call(this._packRenderers, faces, this._current.card()).replaceAll(".faces");
-    $("#controls-error-types").hide();
+    renderer.call(this._packRenderers, $el, this._current.card()).replaceAll(".card");
+    $("#reveal-all-section").show();
+    $(".controls :not(#reveal-all-section)").hide();
   },
 
   _closeReviewer: function() {
@@ -64,26 +67,27 @@ CardViewer.__proto__ = {
   // the __wrongs renderer adds an unhidden "here's what you tend to get wrong"
   // face.
   //
-  // Renderers are decorators on the jQuery element pointing to the <faces>
+  // Renderers are decorators on the jQuery element pointing to the <card> element
   // element being constructed.
   _packRenderers: {
-    basicFaces: function(faces, card) {
-      faces.append(this._newFace("Han", card.han, {hidden:false}));
-      faces.append(this._newFace("Pinyin", card.pinyin, {hidden:true}));
-      faces.append(this._newFace("English", card.english, {hidden:true}));
-      return faces;
+    basicFaces: function($el, card) {
+      $el.append(this._newFace(card.han, "face-han"));
+      $el.append(this._newFace("Pinyin", "face-pinyin", card.pinyin));
+      $el.append(this._newFace("English", "face-english", card.english));
+      return $el;
     },
-    __all: function(faces, card) {
-      faces = this.basicFaces(faces, card);
-      faces.append(this._newFace("Pack", card.pack_name, {hidden:true, className:"face-pack"}));
-      return faces;
+    // TODO: Fish requests view showing English and hiding pinyin & han 
+    __all: function($el, card) {
+      $el = this.basicFaces($el, card);
+      $el.append(this._newFace("pack name", "face-pack_name", card.pack_name));
+      return $el;
     },
-    __multiple: function(faces, card) {
+    __multiple: function($el, card) {
       // Does the same thing as __all
-      return this.__all(faces, card);
+      return this.__all($el, card);
     },
-    __wrongs: function(faces, card) {
-      faces = this.basicFaces(faces, card);
+    __wrongs: function($el, card) {
+      $el = this.basicFaces($el, card);
       function mode(arr){
         return arr.concat().sort((a,b) =>
           arr.filter(v => v===a).length
@@ -92,47 +96,37 @@ CardViewer.__proto__ = {
       }
       var commonestError = mode(card.errors);
       var hint = $("input:button.error[data-error-id="+commonestError+"]").data("errorHint");
-      faces.prepend(this._newFace("Warning", hint, {hidden:false, className:"face-mistake"}));
-      return faces;
+      $el.prepend(this._newFace("Warning", "face-mistake", hint));
+      return $el;
     },
 
-    // Helper function for renderers, returning something like
-    //   <div class="face face-pack">  (or face-<whatever special classname I gave it>)
-    //     <div class="face-label">Pack name</div>
-    //     <div class="face-value">words that I hate</div>
-    //   </div>
-    // Options include 'hidden' bool (is the answer obscured?), and a
-    // 'className' for the face div.
-    _newFace: function(label, answer, options) {
-      var face = $("<div>").addClass("face");
-      if (options && options.className) {
-        face.addClass(options.className);
-      }
-      var label = $("<div>", {
-        "class": "face-label",
-        text: label
+    // If answer is not undefined, returns a .obscured face with the data-answer element
+    // containing the answer.
+    // <div class="face obscured" id="face-pinyin" data-answer="hao">pinyin</div>
+    _newFace: function(text, id, answer) {
+      var face = $("<div>", {
+        "class": "face",
+        text: text,
+        id: id
       });
-      var value = $("<div>", {
-        "class": "face-value",
-        text: answer
-      });
-      if (options && options.hidden) {
-        value.text("<???>");
-        value.click(function() {
-          value.text(answer);
-        });
+      if (answer !== undefined) {
+        face.
+          addClass("obscured").
+          attr("data-answer", answer).
+          click(e => face.removeClass("obscured").text(answer));
       }
-      return face.append(label).append(value);
+      return face;
     }
-
   }
 
 };
 
 $(function() {
+  $(".controls-reveal-all")
   $("#controls-next").click(e => CardViewer._reviewNextCard());
-  $("#controls-close").click(e => CardViewer._closeReviewer());
   $("#controls-clearerrors").click(e => CardViewer._clearErrors());
   $("#controls-error").click(e => $("#controls-error-types").show());
   $("input:button.error").click(e => CardViewer._addError(e.target.dataset.errorId));
+  // TODO Close with back button
+  $("#todo-temp-closer").click(e => CardViewer._closeReviewer());
 });

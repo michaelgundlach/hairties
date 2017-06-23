@@ -24,29 +24,50 @@
       </div>
     </div>
     <div class="reviewer">
-      <div class="faces">
-        <!--
-        <div class="face face-pack">
-          <div class="face-label">Pack name</div>
-          <div class="face-value">Words that I hate</div>
+      <input type="button" id="todo-temp-closer" value="EXIT" />
+      <div class="card">
+        <div class="card-top-half">
+          <div class="face obscured" id="face-pack_name" data-answer="common words">
+            pack name
+          </div>
+          <div class="face" id="face-hint">
+            Warning: tone
+          </div>
+          <div class="face" id="face-han">
+            好
+          </div>
         </div>
-        -->
+        <div class="card-bottom-half">
+          <div class="face obscured" id="face-pinyin" data-answer="hǎo">
+            pinyin
+          </div>
+          <div class="face obscured" id="face-english" data-answer="good">
+            english
+          </div>
+        </div>
       </div>
       <div class="controls">
-        <input type="button" id="controls-close" value="<<"/>
-        <input type="button" id="controls-next" value="Right"/>
-        <input type="button" id="controls-error" value="Wrong"/>
-        <div id="controls-error-types">
+        <div class="controls-section" id="reveal-all-section">
+          <input type="button" value="Reveal All" class="controls-reveal-all"/>
+        </div>
+        <div class="controls-section" id="right-wrong-section">
+          <input type="button" value="Right" class="controls-right"/>
+          <input type="button" value="Wrong" class="controls-wrong"/>
+        </div>
+        <div class="controls-section" id="next-clear-errors-section">
+          <input type="button" value="Next" class="controls-next"/>
+          <input type="button" value="Clear Errors" class="controls-clear-errors"/>
+        </div>
+        <div class="controls-section" id="error-types-section">
           <input type="button" class="error" value="wrong pronunciation"
                  data-error-id="1" data-error-hint="forgot pronunciation"/>
           <input type="button" class="error" value="wrong tone"
                  data-error-id="2" data-error-hint="forgot tone"/>
           <input type="button" class="error" value="wrong English"
                  data-error-id="3" data-error-hint="forgot English meaning"/>
-          <input type="button" class="error" value="confused with another character"
-                 data-error-id="4" data-error-hint="confused with another character"/>
+          <input type="button" class="error" value="forgot"
+                 data-error-id="4" data-error-hint="forgot character"/>
         </div>
-        <input type="button" id="controls-clearerrors" value="Clear Errors"/>
       </div>
     </div>
   </body>
