@@ -14,6 +14,7 @@ function addRow(table, row) {
       ["han", "pinyin", "english"].forEach(function(col) {
         $("#" + col).val(tr.find(".col-" + col).text());
       });
+      $("#han").focus().select();
       delBtn.click();
     });
   var editTd = $("<td>").addClass("edit").append(editBtn);
@@ -74,4 +75,6 @@ $(function() {
       $("#new input:first-child").focus();
     }
   });
+
+  $("#han").focus();
 });
