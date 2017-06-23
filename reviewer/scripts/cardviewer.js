@@ -135,6 +135,7 @@ CardViewer.__proto__ = {
 $(function() {
   $(".controls-reveal-all").click(function() {
     $("#reveal-all-section, #right-wrong-section").toggle();
+    $(".obscured").click();
   });
   $(".controls-wrong").click(function() {
     $("#right-wrong-section, #error-types-section").toggle();
