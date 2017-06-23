@@ -47,7 +47,15 @@ CardViewer.__proto__ = {
   _clearErrors: function() {
     var card = this._current.card();
     card.errors = [];
-    Cards.api.update(card, () => this._reviewNextCard());
+    Cards.api.update(card, () => {
+      this._current.cards = this._current.cards.filter(c => c !== card);
+      if (this._current.cards.length === 0) {
+        this._closeReviewer();
+      } else {
+        this._current.i -= 1;
+        this._reviewNextCard();
+      }
+    })
   },
 
   // "Right" button should move to the next card, unless in
