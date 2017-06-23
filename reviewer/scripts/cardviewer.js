@@ -1,20 +1,21 @@
 CardViewer = function() {}
 CardViewer.__proto__ = {
-  reviewCards: function(cards, rendererName) {
+  reviewCards: function(cards, rendererName, showFace) {
     if (cards.length === 0) {
       alert("Oops: nothing to review!");
       return;
     }
 
     // So that the back button calls popstate() to close the reviewer
-    history.pushState({}, "Review", "#review");
+    history.pushState({}, "Review", null);
 
-    $(".packs").hide();
+    $(".packsviewer").hide();
     $(".reviewer").show();
 
     this._current.cards = cards;
     this._current.cards.sort(() => Math.random() - 0.5); // inefficient shuffle
     this._current.rendererName = rendererName;
+    this._current.showFace = showFace;
     this._current.i = -1; // so reviewNextCard will set it to 0
 
     this._reviewNextCard();
@@ -38,7 +39,7 @@ CardViewer.__proto__ = {
 
   _closeReviewer: function() {
     $(".reviewer").hide();
-    $(".packs").show();
+    $(".packsviewer").show();
   },
 
   _addError: function(errorId) {
@@ -79,7 +80,8 @@ CardViewer.__proto__ = {
 
     cards: [],
     i: 0,
-    rendererName: undefined
+    rendererName: undefined,
+    showFace: undefined
   },
 
   // These render the flash card to HTML, customizing the look of the card
@@ -92,11 +94,18 @@ CardViewer.__proto__ = {
   // Renderers fill in the $top and $bottom halves of the card being constructed.
   _packRenderers: {
     basicFaces: function($top, $bot, card) {
-      $top.append(this._newFace(card.han, "face-han"));
-      $bot.append(this._newFace("Pinyin", "face-pinyin", card.pinyin));
-      $bot.append(this._newFace("English", "face-english", card.english));
+      var faceToShow = CardViewer._current.showFace;
+      // Put faceToShow on top, and the rest on bottom obscured
+      var attr = faceToShow.toLowerCase();
+      var obscured = ["Han", "Pinyin", "English"].filter(n => n !== faceToShow);
+      var face = this._newFace(card[attr], "face-" + attr);
+      face.addClass("basic");
+      $top.append(face);
+      obscured.forEach((label) => {
+        var attr = label.toLowerCase();
+        $bot.append(this._newFace(label, "face-" + attr, card[attr]));
+      });
     },
-    // TODO: Fish requests view showing English and hiding pinyin & han 
     __all: function($top, $bot, card) {
       this.basicFaces($top, $bot, card);
       $top.append(this._newFace("pack name", "face-pack_name", card.pack_name));
@@ -136,7 +145,7 @@ CardViewer.__proto__ = {
             // If all obscureds have been manually clicked, it's like you
             // clicked "Reveal All".  Go ahead and show right/wrong buttons
             if ($(".obscured").length === 0) {
-              $(".controls-reveal-all").click();
+              $("#reveal-all-section, #right-wrong-section").toggle();
             }
           });
       }
@@ -149,7 +158,6 @@ CardViewer.__proto__ = {
 $(function() {
   $(window).on("popstate", () => CardViewer._closeReviewer());
   $(".controls-reveal-all").click(function() {
-    $("#reveal-all-section, #right-wrong-section").toggle();
     $(".obscured").click();
   });
   $(".controls-wrong").click(function() {

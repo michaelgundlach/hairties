@@ -42,12 +42,21 @@ PacksViewer.__proto__ = {
       // TODO: select multiple
       which = (card) => true;
     }
-    CardViewer.reviewCards(cards.filter(which), virtualPackName);
+    CardViewer.reviewCards(cards.filter(which), virtualPackName, this._selectedFace());
   },
 
   // Review the cards from the |cards| list with the given |packName|.
   _reviewActualPack: function(cards, packName) {
     var which = (card) => card.pack_name === packName;
-    CardViewer.reviewCards(cards.filter(which), "basicFaces");
-  }
+    CardViewer.reviewCards(cards.filter(which), "basicFaces", this._selectedFace());
+  },
+
+  _selectedFace: () => $(".settings input[checked]").val()
 };
+
+$(function() {
+  $(".packsviewer .settings input").click(function() {
+    $(this).siblings().attr("checked", null);
+    $(this).attr("checked", true);
+  });
+});
