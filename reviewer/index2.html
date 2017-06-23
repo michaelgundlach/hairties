@@ -8,17 +8,10 @@
     <script src="scripts/cards.js"></script>
     <script src="scripts/cardviewer.js"></script>
     <script src="scripts/packsviewer.js"></script>
-    <script>
-      $(function() {
-        $("body, .reviewer, .controls").show();
-        $(".obscured").click(function() {
-          $(this).removeClass("obscured").text($(this).data("answer"));
-        });
-      });
-    </script>
   </head>
   <body>
     <div class="reviewer">
+      <input type="button" id="todo-temp-closer" value="EXIT" />
       <div class="card">
         <div class="card-top-half">
           <div class="face obscured" id="face-pack_name" data-answer="common words">
@@ -42,15 +35,15 @@
       </div>
       <div class="controls">
         <div class="controls-section" id="reveal-all-section">
-          <input type="button" value="Reveal All"/>
+          <input type="button" value="Reveal All" class="controls-reveal-all"/>
         </div>
         <div class="controls-section" id="right-wrong-section">
-          <input type="button" value="Right"/>
-          <input type="button" value="Wrong"/>
+          <input type="button" value="Right" class="controls-right"/>
+          <input type="button" value="Wrong" class="controls-wrong"/>
         </div>
         <div class="controls-section" id="next-clear-errors-section">
-          <input type="button" value="Next"/>
-          <input type="button" value="Clear Errors"/>
+          <input type="button" value="Next" class="controls-next"/>
+          <input type="button" value="Clear Errors" class="controls-clear-errors"/>
         </div>
         <div class="controls-section" id="error-types-section">
           <input type="button" class="error" value="wrong pronunciation"

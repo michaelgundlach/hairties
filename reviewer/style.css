@@ -1,7 +1,6 @@
 body { 
-  font-size: 1em; 
   font-family: arial;
-  background: black;
+  background: white;
 }
 
 /* So it doesn't flicker while we load */
@@ -9,14 +8,9 @@ body {
   display: none;
 }
 
-div {
-  background: #ddd;
-  margin: 2px;
-}
 
 
-
-/* PacksViewer */
+/*************** PacksViewer ************ */
 
 .packs {
   display: flex;
@@ -46,34 +40,168 @@ div {
 }
 
 
-/* CardViewer */
+/*************** CardViewer ************ */
 
-.reviewer {
-  display: none;
+/* Colors */
+.card-top-half {
+  background: #328b95;
+}
+.card-bottom-half {
+  background: #eee;
+}
+.controls-section input[type="button"] {
+  background: #998;
+}
+[data-answer] {
+  background: white;
+}
+#face-hint {
+  background: #d44;
+}
+.face.obscured {
+  color: gray;
 }
 
-.faces {
+/* Make reviewer 90% width and height of screen */
+html,body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reviewer {
+  height: 90%;
+  width: 90%;
+}
+
+/* Controls get a fixed height; card fills the rest of the reviewer */
+.reviewer {
+  display: flex; /* for letting .card fill non-.controls height */
+  flex-direction: column;
+}
+.card {
+  flex-grow: 1;
+}
+.controls {
+  /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
+  height: 2in;  /* adjust this in sync with .controls input height below */
+}
+
+/* Card top and bottom halfs split the available height */
+.card {
   display: flex;
   flex-direction: column;
 }
+.card-top-half {
+  flex-grow: 6;
+}
+.card-bottom-half {
+  flex-grow: 4;
+}
 
+/* Faces are centered in the card */
+.card-top-half, .card-bottom-half {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Controls items go left to right */
+.controls-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Control buttons are huge squares with wrapping text */
+.controls-section {
+  height: 100%;
+}
+.controls input[type="button"] {
+  height: 1.5in; /* adjust this in sync with .controls height above */
+  width: 1.5in;
+  font-size: 3em;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+
+/* Card is rounded on top and bottom and separated from the controls*/
+.card-top-half {
+  border-top-right-radius: .5em;
+  border-top-left-radius: .5em;
+}
+.card-bottom-half {
+  border-bottom-right-radius: .2em;
+  border-bottom-left-radius: .2em;
+}
+.card {
+  margin-bottom: 20px;
+}
+
+/* *********** CardViewer Face stylin ************ */
+
+/* Face text is centered and easy to read */
+.card {
+  font-size: 50px;
+}
 .face {
-  margin: 10px;
-  border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.face-label {
-  font-size: 1em;
-}
-.face-value {
+
+/* Han is bigger */
+#face-han {
   font-size: 2em;
 }
 
-.face-mistake {
-  color: red;
+/* color and height of obscured/unobscured stuff */
+[data-answer] {
+  height: 2em;
 }
-.face-pack {
-  color: blue;
+
+/* obscured stuff is marked thus */
+.face.obscured {
+  border: 5px dashed black;
+  border-radius: .3em;
+  font-style: italic;
 }
-.controls {
-  border: 2px solid black;
+/* revealed stuff looks like this */
+.face:not(.obscured)[data-answer] {
+  border: 5px dashed white;
+  border-radius: .3em;
+}
+
+/* Faces have spaces around them */
+.face {
+  margin: 20px;
+  width: 80%;
+}
+
+/* Warning is rounded */
+#face-hint {
+  border-radius: .3em;
+}
+
+/* Pack name at top right */
+.card {
+  position: relative;
+}
+#face-pack_name {
+  position: absolute;
+  font-size: .5em;
+  width: 40%;
+  right: 10px;
+  top: 10px;
+}
+
+/* TODO temp close button until back button works */
+#todo-temp-closer {
+  position: absolute;
+  top: 0px;
+  left; 0px;
+  font-size:3em;
 }
