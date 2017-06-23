@@ -11,16 +11,23 @@
     <script src="scripts/script.js"></script>
   </head>
   <body>
-    <div class="packs">
-      <div id="virtual" class="packlist">
-        <input type="button" class="pack"
-               value="All Cards" data-pack-name="__all" />
-        <input type="button" class="pack"
-               value="Multiple Packs(TODO)" data-pack-name="__multiple" />
-        <input type="button" class="pack"
-               value="Cards With Errors" data-pack-name="__wrongs" />
+    <div class="packsviewer">
+      <div class="settings">
+        Review the:
+        <input type="button" value="Han" checked />
+        <input type="button" value="English" />
       </div>
-      <div id="actual" class="packlist">
+      <div class="packs">
+        <div id="virtual" class="packlist">
+          <input type="button" class="pack"
+                 value="All Cards" data-pack-name="__all" />
+          <input type="button" class="pack"
+                 value="Multiple Packs(TODO)" data-pack-name="__multiple" />
+          <input type="button" class="pack"
+                 value="Cards With Errors" data-pack-name="__wrongs" />
+        </div>
+        <div id="actual" class="packlist">
+        </div>
       </div>
     </div>
     <div class="reviewer">

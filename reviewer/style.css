@@ -40,6 +40,22 @@ body {
   background: white;
 }
 
+/* Select buttons get colored based on selection */
+.settings input {
+  height: 3em;
+  font-size: 1em;
+  padding: 3px;
+  width: 5em;
+  background: white;
+  margin: .5em;
+  border: 1px solid grey;
+  border-radius: .5em;
+}
+.settings input[checked] {
+  background: #3e8d39;
+  border: 1px solid black;
+}
+
 
 /*************** CardViewer ************ */
 
@@ -170,8 +186,8 @@ html,body {
   justify-content: center;
 }
 
-/* Han is bigger */
-#face-han {
+/* Basic faces on top half are bigger */
+.card-top-half .basic {
   font-size: 2em;
 }
 
