@@ -34,7 +34,7 @@ CardViewer.__proto__ = {
     renderer.call(this._packRenderers, $top, $bot, this._current.card());
     $(".card").html($top).append($bot);
     $("#reveal-all-section").show();
-    $(".controls-section:not(#reveal-all-section)").hide();
+    $(".controls .row-of-buttons:not(#reveal-all-section)").hide();
   },
 
   _closeReviewer: function() {

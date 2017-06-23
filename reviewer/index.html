@@ -11,27 +11,28 @@
     <script src="scripts/script.js"></script>
   </head>
   <body>
-    <div class="packsviewer">
-      <div class="settings">
-        Review the:
-        <input type="button" value="Han" checked />
-        <input type="button" value="English" />
-      </div>
-      <div class="packs">
+    <div class="packsviewer fill-screen">
+      <div class="packs non-thumb-zone">
         <div id="virtual" class="packlist">
           <input type="button" class="pack"
                  value="All Cards" data-pack-name="__all" />
           <input type="button" class="pack"
-                 value="Multiple Packs(TODO)" data-pack-name="__multiple" />
+                 value="Multiple Packs (TODO)" data-pack-name="__multiple" />
           <input type="button" class="pack"
                  value="Cards With Errors" data-pack-name="__wrongs" />
         </div>
         <div id="actual" class="packlist">
         </div>
       </div>
+      <div class="settings thumb-zone">
+        <div class="row-of-buttons">
+          <input type="button" value="Han" checked />
+          <input type="button" value="English" />
+        </div>
+      </div>
     </div>
-    <div class="reviewer">
-      <div class="card">
+    <div class="reviewer fill-screen">
+      <div class="card non-thumb-zone">
         <div class="card-top-half">
           <div class="face obscured" id="face-pack_name" data-answer="common words">
             pack name
@@ -52,19 +53,19 @@
           </div>
         </div>
       </div>
-      <div class="controls">
-        <div class="controls-section" id="reveal-all-section">
+      <div class="controls thumb-zone">
+        <div class="row-of-buttons" id="reveal-all-section">
           <input type="button" value="Reveal All" class="controls-reveal-all"/>
         </div>
-        <div class="controls-section" id="right-wrong-section">
+        <div class="row-of-buttons" id="right-wrong-section">
           <input type="button" value="✔" class="controls-right"/>
           <input type="button" value="✖" class="controls-wrong"/>
         </div>
-        <div class="controls-section" id="next-clear-errors-section">
+        <div class="row-of-buttons" id="next-clear-errors-section">
           <input type="button" value="Next" class="controls-next"/>
           <input type="button" value="Clear Errors" class="controls-clear-errors"/>
         </div>
-        <div class="controls-section" id="error-types-section">
+        <div class="row-of-buttons" id="error-types-section">
           <input type="button" class="error" value="forgot pinyin"
                  data-error-id="1" data-error-hint="forgot: pinyin"/>
           <input type="button" class="error" value="forgot tone"

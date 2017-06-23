@@ -9,52 +9,91 @@ body {
 }
 
 
+/* ************* Common to PacksViewer and CardViewer ****************** */
+
+/* Make them 90% width and height of screen */
+html,body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fill-screen {
+  height: 90%;
+  width: 90%;
+}
+
+/* Bottom "thumb zone" is a fixed height; the "non-thumb-zone" fills the rest of the space */
+.fill-screen {
+  display: flex; flex-flow: column;
+}
+.non-thumb-zone {
+  flex-grow: 1;
+}
+.thumb-zone {
+  /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
+  height: 2in;  /* adjust this in sync with .row-of-buttons input height */
+}
+
+/* Rows of buttons are rounded, as wide as possible, with wrapping text */
+.row-of-buttons {
+  display: flex; flex-flow: row;
+  align-items: center;
+  justify-content: space-around;
+
+  height: 100%;
+}
+.row-of-buttons input[type="button"] {
+  border-radius: .5em;
+  height: 1.5in; /* adjust this in sync with .thumb-zone height */
+  width: 100%;
+  margin-left: 1%; margin-right: 1%;
+  font-size: 3em;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+
 
 /*************** PacksViewer ************ */
 
+/* Colors */
+.settings .row-of-buttons input:not([checked]) {
+  background: white;
+}
+.settings input[checked] {
+  border: 3px solid black;
+}
+
+
+/* 2 columns of notecards, full width, can't widen */
 .packs {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: flex; flex-flow: row nowrap;
 }
-
 .packlist {
-  /* Properties as a flex item */
   flex-grow: 1;
-
-  /* Properties as a flex container */
-  display: flex;
-  flex-direction: column;
+  max-width: 50%;
 }
 
+/* each column's notecards are full width */
+.packlist {
+  display: flex; flex-flow: column;
+}
+.pack {
+  flex-grow: 1;
+}
+
+/* Packs look like notecards, good size, easy to read */
 .pack {
   background: url(img/notecard.png) no-repeat center center;
   background-size: 100% 100%;
-  flex-grow: 1;
+  max-height: 4em;
   margin: 15px; 
-  padding: 1em;
-  font-size: 2em;
+  font-size: 50px;
+  white-space: normal;
 }
 
-#virtual, #actual {
-  background: white;
-}
-
-/* Select buttons get colored based on selection */
-.settings input {
-  height: 3em;
-  font-size: 1em;
-  padding: 3px;
-  width: 5em;
-  background: white;
-  margin: .5em;
-  border: 1px solid grey;
-  border-radius: .5em;
-}
-.settings input[checked] {
-  background: #3e8d39;
-  border: 1px solid black;
-}
 
 
 /*************** CardViewer ************ */
@@ -66,13 +105,13 @@ body {
 .card-bottom-half {
   background: #c5c2bd;
 }
-.controls-section input[type="button"] {
+.row-of-buttons input[type="button"] {
   background: #3e8d39;
 }
-.controls-section input[type="button"].controls-clear-errors {
+.row-of-buttons input[type="button"].controls-clear-errors {
   background: #619da4;
 }
-.controls-section input[type="button"].controls-wrong,
+.row-of-buttons input[type="button"].controls-wrong,
 #error-types-section input[type="button"]
 {
   background: #cc3434;
@@ -88,36 +127,10 @@ body {
   color: gray;
 }
 
-/* Make reviewer 90% width and height of screen */
-html,body {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.reviewer {
-  height: 90%;
-  width: 90%;
-}
-
-/* Controls get a fixed height; card fills the rest of the reviewer */
-.reviewer {
-  display: flex; /* for letting .card fill non-.controls height */
-  flex-direction: column;
-}
-.card {
-  flex-grow: 1;
-}
-.controls {
-  /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
-  height: 2in;  /* adjust this in sync with .controls input height below */
-}
 
 /* Card top and bottom halfs split the available height */
 .card {
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-flow: column;
 }
 .card-top-half {
   flex-grow: 6;
@@ -128,32 +141,9 @@ html,body {
 
 /* Faces are centered in the card */
 .card-top-half, .card-bottom-half {
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-flow: column;
   justify-content: center;
   align-items: center;
-}
-
-/* Controls items go left to right and are spread out */
-.controls-section {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-}
-
-/* Control buttons are rounded, as wide as possible, with wrapping text */
-.controls-section {
-  height: 100%;
-}
-.controls input[type="button"] {
-  border-radius: .5em;
-  height: 1.5in; /* adjust this in sync with .controls height above */
-  width: 100%;
-  margin-left: 1%; margin-right: 1%;
-  font-size: 3em;
-  word-wrap: break-word;
-  white-space: normal;
 }
 
 /* Errors have smaller text to fit on buttons */
@@ -181,7 +171,7 @@ html,body {
   font-size: 50px;
 }
 .face {
-  display: flex;
+  display: flex; flex-flow: column;
   align-items: center;
   justify-content: center;
 }
