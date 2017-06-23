@@ -131,7 +131,14 @@ CardViewer.__proto__ = {
         face.
           addClass("obscured").
           attr("data-answer", answer).
-          click(e => face.removeClass("obscured").text(answer));
+          click(function() {
+            face.removeClass("obscured").text(answer);
+            // If all obscureds have been manually clicked, it's like you
+            // clicked "Reveal All".  Go ahead and show right/wrong buttons
+            if ($(".obscured").length === 0) {
+              $(".controls-reveal-all").click();
+            }
+          });
       }
       return face;
     }
