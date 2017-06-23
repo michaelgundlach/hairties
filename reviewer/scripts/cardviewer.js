@@ -30,7 +30,7 @@ CardViewer.__proto__ = {
     // Set 'this' to this._packRenderers inside the renderer
     renderer.call(this._packRenderers, $el, this._current.card()).replaceAll(".card");
     $("#reveal-all-section").show();
-    $(".controls :not(#reveal-all-section)").hide();
+    $(".controls-section:not(#reveal-all-section)").hide();
   },
 
   _closeReviewer: function() {
@@ -48,6 +48,17 @@ CardViewer.__proto__ = {
     var card = this._current.card();
     card.errors = [];
     Cards.api.update(card, () => this._reviewNextCard());
+  },
+
+  // "Right" button should move to the next card, unless in
+  // __wrongs mode where it asks to clear errors.
+  _handleCorrectAnswer: function() {
+    $("#right-wrong-section").hide();
+    if (this._current.rendererName === "__wrongs") {
+      $("#next-clear-errors-section").show();
+    } else {
+      this._reviewNextCard();
+    }
   },
 
 
@@ -122,10 +133,17 @@ CardViewer.__proto__ = {
 };
 
 $(function() {
-  $(".controls-reveal-all")
-  $("#controls-next").click(e => CardViewer._reviewNextCard());
-  $("#controls-clearerrors").click(e => CardViewer._clearErrors());
-  $("#controls-error").click(e => $("#controls-error-types").show());
+  $(".controls-reveal-all").click(function() {
+    $("#reveal-all-section, #right-wrong-section").toggle();
+  });
+  $(".controls-wrong").click(function() {
+    $("#right-wrong-section, #error-types-section").toggle();
+  });
+  $(".controls-right").click(function() {
+    CardViewer._handleCorrectAnswer();
+  });
+  $(".controls-next").click(e => CardViewer._reviewNextCard());
+  $(".controls-clear-errors").click(e => CardViewer._clearErrors());
   $("input:button.error").click(e => CardViewer._addError(e.target.dataset.errorId));
   // TODO Close with back button
   $("#todo-temp-closer").click(e => CardViewer._closeReviewer());
