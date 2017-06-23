@@ -48,7 +48,7 @@ $(function() {
     if (dups.length > 0) {
       var val = (col) => dups.eq(0).parent().find(".col-" + col).text();
       var dup_id = val("id");
-      var warning = "ERROR: duplicate of #" + val("id") + " (" + val("pinyin") + " = " +
+      var warning = "ERROR: duplicate of " + val("pack_name") + " #" + val("id") + " (" + val("pinyin") + " = " +
         val("english") + ")";
       $("#dup_warning").text(warning);
       return;
