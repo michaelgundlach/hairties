@@ -38,6 +38,11 @@ def update_fields_sql(row):
             (row['han'], row['pinyin'], row['english'], row['pack_name'], row['errors']))
 
 
+@app.after_request
+def add_header(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 @app.route("/cards/", methods=["GET"])
 def cards():
     conn, c = db()
