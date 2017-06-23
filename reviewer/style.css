@@ -214,11 +214,3 @@ html,body {
   right: 10px;
   top: 10px;
 }
-
-/* TODO temp close button until back button works */
-#todo-temp-closer {
-  position: absolute;
-  top: 0px;
-  left; 0px;
-  font-size:3em;
-}

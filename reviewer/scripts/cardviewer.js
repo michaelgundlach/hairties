@@ -6,6 +6,9 @@ CardViewer.__proto__ = {
       return;
     }
 
+    // So that the back button calls popstate() to close the reviewer
+    history.pushState({}, "Review", "#review");
+
     $(".packs").hide();
     $(".reviewer").show();
 
@@ -137,6 +140,7 @@ CardViewer.__proto__ = {
 };
 
 $(function() {
+  $(window).on("popstate", () => CardViewer._closeReviewer());
   $(".controls-reveal-all").click(function() {
     $("#reveal-all-section, #right-wrong-section").toggle();
     $(".obscured").click();
@@ -150,6 +154,4 @@ $(function() {
   $(".controls-next").click(e => CardViewer._reviewNextCard());
   $(".controls-clear-errors").click(e => CardViewer._clearErrors());
   $("input:button.error").click(e => CardViewer._addError(e.target.dataset.errorId));
-  // TODO Close with back button
-  $("#todo-temp-closer").click(e => CardViewer._closeReviewer());
 });
