@@ -107,7 +107,7 @@ CardViewer.__proto__ = {
       }
       var commonestError = mode(card.errors);
       var hint = $("input:button.error[data-error-id="+commonestError+"]").data("errorHint");
-      $el.prepend(this._newFace("Warning", "face-mistake", hint));
+      $el.prepend(this._newFace("Warning: " + hint, "face-hint"));
       return $el;
     },
 

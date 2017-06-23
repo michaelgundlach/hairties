@@ -30,13 +30,13 @@ body {
 .pack {
   /* TODO: style as a pack of notecards */
   flex-grow: 1;
-  margin: 3px;
+  margin: 15px; 
   padding: 1em;
-  font-size: 1em;
+  font-size: 2em;
 }
 
 #virtual, #actual {
-  background: red;
+  background: white;
 }
 
 
@@ -127,6 +127,10 @@ html,body {
   white-space: normal;
 }
 
+/* Reveal All is even huger */
+input[type="button"].controls-reveal-all {
+  width: 100%;
+}
 
 /* Card is rounded on top and bottom and separated from the controls*/
 .card-top-half {
