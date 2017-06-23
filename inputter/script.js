@@ -46,9 +46,14 @@ $(function() {
     // Make sure we don't already have it
     var dups = $(".col-han:contains('" + $("#han").val() + "')");
     if (dups.length > 0) {
-      alert("Already entered (id " + dups.eq(0).parent().find(".col-id").text() + ")");
+      var val = (col) => dups.eq(0).parent().find(".col-" + col).text();
+      var dup_id = val("id");
+      var warning = "ERROR: duplicate of #" + val("id") + " (" + val("pinyin") + " = " +
+        val("english") + ")";
+      $("#dup_warning").text(warning);
       return;
     }
+    $("#dup_warning").text("");
     var card = {
       han: $("#han").val(),
       pinyin: prettify_pinyin($("#pinyin").val()),

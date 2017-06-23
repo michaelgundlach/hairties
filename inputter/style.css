@@ -33,3 +33,7 @@ thead {
 #new {
   margin-bottom: 2em;
 }
+
+#dup_warning {
+  color: red;
+}
