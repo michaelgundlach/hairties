@@ -23,12 +23,12 @@ CardViewer.__proto__ = {
     if (this._current.card() === undefined) {
       this._current.i = 0;
     }
-    var $el = $("<div>", {"class": "card"}).
-      append($("<div>", {"class": "card-top-half"})).
-      append($("<div>", {"class": "card-bottom-half"}));
+    var $top = $("<div>", {"class": "card-top-half"});
+    var $bot = $("<div>", {"class": "card-bottom-half"});
     var renderer = this._packRenderers[this._current.rendererName];
     // Set 'this' to this._packRenderers inside the renderer
-    renderer.call(this._packRenderers, $el, this._current.card()).replaceAll(".card");
+    renderer.call(this._packRenderers, $top, $bot, this._current.card());
+    $(".card").html($top).append($bot);
     $("#reveal-all-section").show();
     $(".controls-section:not(#reveal-all-section)").hide();
   },
@@ -86,27 +86,24 @@ CardViewer.__proto__ = {
   // the __wrongs renderer adds an unhidden "here's what you tend to get wrong"
   // face.
   //
-  // Renderers are decorators on the jQuery element pointing to the <card> element
-  // element being constructed.
+  // Renderers fill in the $top and $bottom halves of the card being constructed.
   _packRenderers: {
-    basicFaces: function($el, card) {
-      $el.append(this._newFace(card.han, "face-han"));
-      $el.append(this._newFace("Pinyin", "face-pinyin", card.pinyin));
-      $el.append(this._newFace("English", "face-english", card.english));
-      return $el;
+    basicFaces: function($top, $bot, card) {
+      $top.append(this._newFace(card.han, "face-han"));
+      $bot.append(this._newFace("Pinyin", "face-pinyin", card.pinyin));
+      $bot.append(this._newFace("English", "face-english", card.english));
     },
     // TODO: Fish requests view showing English and hiding pinyin & han 
-    __all: function($el, card) {
-      $el = this.basicFaces($el, card);
-      $el.append(this._newFace("pack name", "face-pack_name", card.pack_name));
-      return $el;
+    __all: function($top, $bot, card) {
+      this.basicFaces($top, $bot, card);
+      $top.append(this._newFace("pack name", "face-pack_name", card.pack_name));
     },
-    __multiple: function($el, card) {
+    __multiple: function($top, $bot, card) {
       // Does the same thing as __all
-      return this.__all($el, card);
+      this.__all($top, $bot, card);
     },
-    __wrongs: function($el, card) {
-      $el = this.basicFaces($el, card);
+    __wrongs: function($top, $bot, card) {
+      this.basicFaces($top, $bot, card);
       function mode(arr){
         return arr.concat().sort((a,b) =>
           arr.filter(v => v===a).length
@@ -115,8 +112,7 @@ CardViewer.__proto__ = {
       }
       var commonestError = mode(card.errors);
       var hint = $("input:button.error[data-error-id="+commonestError+"]").data("errorHint");
-      $el.prepend(this._newFace("Warning: " + hint, "face-hint"));
-      return $el;
+      $top.prepend(this._newFace("Warning: " + hint, "face-hint"));
     },
 
     // If answer is not undefined, returns a .obscured face with the data-answer element
