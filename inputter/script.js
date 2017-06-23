@@ -8,6 +8,16 @@ function addRow(table, row) {
     tr.append($("<td>").addClass("col-" + header).text(row[header]));
   });
   var delBtn = $("<input>", {type:"button", val: "X"});
+  var editBtn = $("<input>", {type:"button", val: ":("}).
+    click(function() {
+      // Fill in textboxes with this row's content
+      ["han", "pinyin", "english"].forEach(function(col) {
+        $("#" + col).val(tr.find(".col-" + col).text());
+      });
+      delBtn.click();
+    });
+  var editTd = $("<td>").addClass("edit").append(editBtn);
+  tr.append(editTd);
   delBtn.click(function() {
     Cards.api.del(row['id'], function() {
       tr.hide(function() { tr.remove(); });
