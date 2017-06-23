@@ -1,6 +1,6 @@
 body { 
   font-family: arial;
-  background: red;
+  background: white;
 }
 
 /* So it doesn't flicker while we load */
@@ -10,7 +10,7 @@ body {
 
 
 
-/* PacksViewer */
+/*************** PacksViewer ************ */
 
 .packs {
   display: flex;
@@ -40,36 +40,18 @@ body {
 }
 
 
-/* CardViewer */
-.reviewer {
-  display: none;
-}
+/*************** CardViewer ************ */
 
-
-/* TODO temp colors and margins */
-div { 
-  margin-left: 3px; margin-right: 3px;
-  padding-left: 8px; padding-right: 8px;
-}
-.reviewer {
-  background:yellow;
-}
-.card {
-  background: purple;
-}
+/* Colors */
 .card-top-half {
-  background: #48f;
+  background: #328b95;
 }
 .card-bottom-half {
-  background: white;
+  background: #eee;
 }
-.controls {
-  background: orange;
+.controls-section input[type="button"] {
+  background: #998;
 }
-.controls > * {
-  background: #fd0;
-}
-/* END temp colors and margins */
 
 /* Make reviewer 90% width and height of screen */
 html,body {
@@ -93,7 +75,8 @@ html,body {
   flex-grow: 1;
 }
 .controls {
-  height: 2in; /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
+  /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
+  height: 2in;  /* adjust this in sync with .controls input height below */
 }
 
 /* Card top and bottom halfs split the available height */
@@ -117,23 +100,35 @@ html,body {
 }
 
 /* Controls items go left to right */
-.controls > * {
+.controls-section {
   display: flex;
   flex-direction: row;
+  align-items: center;
+}
 
+/* Control buttons are huge squares with wrapping text */
+.controls-section {
+  height: 100%;
+}
+.controls input[type="button"] {
+  height: 1.5in; /* adjust this in sync with .controls height above */
+  width: 1.5in;
+  font-size: 3em;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 
 /* Card is rounded on top and separated from the controls*/
 .card-top-half {
-  border-top-right-radius: 1em;
-  border-top-left-radius: 1em;
+  border-top-right-radius: .5em;
+  border-top-left-radius: .5em;
 }
 .card {
   margin-bottom: 20px;
 }
 
-/* *********** Face stylin ************ */
+/* *********** CardViewer Face stylin ************ */
 
 /* Face text is centered and easy to read */
 .card {
