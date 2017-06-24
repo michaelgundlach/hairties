@@ -41,6 +41,7 @@ def update_fields_sql(row):
 @app.after_request
 def add_header(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
     return response
 
 @app.route("/cards/", methods=["GET"])
