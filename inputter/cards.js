@@ -1,29 +1,31 @@
 Cards = {
 
   api: {
+    _root: "http://hairties.sorryrobot.com/api/cards/",
+
     // Call callback(cards) with a list of all cards.
     get_all: function(callback) {
-      $.ajax("/api/cards/",
+      $.ajax(this._root,
              {type: "GET", success: callback});
     },
 
     // Add a new card, calling callback(card) with the newly created card.
     add: function(card, callback) {
       var data = JSON.stringify(card);
-      $.ajax("/api/cards/",
+      $.ajax(this._root,
              {type: "POST", data: data, success: callback});
     },
 
     // Update |card|, calling callback() upon success.
     update: function(card, callback) {
       var data = JSON.stringify(card);
-      $.ajax("/api/cards/" + card.id,
+      $.ajax(this._root + card.id,
              {type: "PUT", data: data, success: callback});
     },
 
     // Delete the given card id, calling callback() upon success.
     del: function(cardid, callback) {
-      $.ajax("/api/cards/" + cardid,
+      $.ajax(this._root + cardid,
              {type: "DELETE", success: callback});
     }
   },
