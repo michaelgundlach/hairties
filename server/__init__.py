@@ -31,8 +31,7 @@ def card_row_dict_to_output(row):
 def update_fields_sql(row):
     """Return 'a=b, c=d, e=f' for the keys and values in the given card's
     data dict.  Clean column names to protect against sqlinjection."""
-    # TODO hard coded to han|pinyin|english|errors, maybe fine.
-    # If we ever read column names from the card (aka unsafe user input),
+    # NB: If we ever read column names from the card (aka unsafe user input),
     # be sure to convert colnames to ''.join(c for c in colname if c.isalnum())
     return ("han=?,pinyin=?,english=?,pack_name=?,errors=?",
             (row['han'], row['pinyin'], row['english'], row['pack_name'], row['errors']))
