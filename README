@@ -3,3 +3,4 @@ Flashcard review app.
 server/ - Flask app, storing cards and exposing them via a REST JSON API.
 inputter/ - input website, like a spreadsheet, showing all cards.
 reviewer/ - review website, reviewing one card at a time.
+  This can be turned into a phone app: see michaelgundlach/hairties_phonegap repo README.
