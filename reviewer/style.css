@@ -32,8 +32,7 @@ html,body {
   flex-grow: 1;
 }
 .thumb-zone {
-  /* TODO this doesn't seem to reliable set a fixed height - maybe use px */
-  height: 2in;  /* adjust this in sync with .row-of-buttons input height */
+  height: 130px;
 }
 
 /* Rows of buttons are rounded, as wide as possible, with wrapping text */
@@ -46,7 +45,7 @@ html,body {
 }
 .row-of-buttons input[type="button"] {
   border-radius: .5em;
-  height: 1.5in; /* adjust this in sync with .thumb-zone height */
+  height: 100%;
   width: 100%;
   margin-left: 1%; margin-right: 1%;
   font-size: 3em;
