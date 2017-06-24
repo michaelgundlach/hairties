@@ -20,8 +20,8 @@ html,body {
   justify-content: center;
 }
 .fill-screen {
-  height: 90%;
-  width: 90%;
+  height: 90vh;
+  width: 90vw;
 }
 
 /* Bottom "thumb zone" is a fixed height; the "non-thumb-zone" fills the rest of the space */
@@ -32,7 +32,7 @@ html,body {
   flex-grow: 1;
 }
 .thumb-zone {
-  height: 130px;
+  height: 20vh;
 }
 
 /* Rows of buttons are rounded, as wide as possible, with wrapping text */
@@ -44,11 +44,11 @@ html,body {
   height: 100%;
 }
 .row-of-buttons input[type="button"] {
-  border-radius: .5em;
+  border-radius: 3vh;
   height: 100%;
   width: 100%;
   margin-left: 1%; margin-right: 1%;
-  font-size: 3em;
+  font-size: 7vh;
   word-wrap: break-word;
   white-space: normal;
 }
@@ -87,9 +87,9 @@ html,body {
 .pack {
   background: url(img/notecard.png) no-repeat center center;
   background-size: 100% 100%;
-  max-height: 4em;
-  margin: 15px; 
-  font-size: 50px;
+  max-height: 15vh;
+  margin: 2vw;
+  font-size: 3.5vh;
   white-space: normal;
 }
 
@@ -145,29 +145,29 @@ html,body {
   align-items: center;
 }
 
-/* Errors have smaller text to fit on buttons */
+/* Errors have text that can fit on buttons */
 .controls #error-types-section input[type="button"] {
-  font-size: 2em;
+  font-size: 4vh;
 }
 
 /* Card is rounded on top and bottom and separated from the controls*/
 .card-top-half {
-  border-top-right-radius: .5em;
-  border-top-left-radius: .5em;
+  border-top-right-radius: 1vh;
+  border-top-left-radius: 1vh;
 }
 .card-bottom-half {
-  border-bottom-right-radius: .2em;
-  border-bottom-left-radius: .2em;
+  border-bottom-right-radius: 1vh;
+  border-bottom-left-radius: 1vh;
 }
 .card {
-  margin-bottom: 20px;
+  margin-bottom: 1vh;
 }
 
 /* *********** CardViewer Face stylin ************ */
 
 /* Face text is centered and easy to read */
 .card {
-  font-size: 50px;
+  font-size: 4vh;
 }
 .face {
   display: flex; flex-flow: column;
@@ -177,36 +177,36 @@ html,body {
 
 /* Basic faces on top half are bigger */
 .card-top-half .basic {
-  font-size: 2em;
+  font-size: 10vh;
 }
 
 /* color and height of obscured/unobscured stuff */
 [data-answer] {
-  height: 2em;
+  height: 8vh;
 }
 
 /* obscured stuff is marked thus */
 .face.obscured {
-  border: 5px dashed black;
-  border-radius: .3em;
+  border: .8vw dashed black;
+  border-radius: 1vh;
   font-style: italic;
 }
 /* revealed stuff looks like this */
 .face:not(.obscured)[data-answer] {
-  border: 5px dashed white;
-  border-radius: .3em;
+  border: .8vw dashed white;
+  border-radius: 1vh;
 }
 
 /* Faces have spaces around them */
 .face {
-  margin: 20px;
+  margin: 2vh;
   width: 80%;
 }
 
 /* Warning is rounded, italic, and a little taller */
 #face-hint {
-  border-radius: .3em;
-  height: 1.5em;
+  border-radius: 1vh;
+  height: 6vh;
 }
 
 /* Pack name at top right */
@@ -215,8 +215,9 @@ html,body {
 }
 #face-pack_name {
   position: absolute;
-  font-size: .5em;
+  font-size: 2vh;
+  height: 4vh;
   width: 40%;
-  right: 10px;
-  top: 10px;
+  right: 0vh;
+  top: 0vw;
 }
