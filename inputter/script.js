@@ -45,7 +45,8 @@ $(function() {
 
   $("#add").click(function() {
     // Make sure we don't already have it
-    var dups = $(".col-han:contains('" + $("#han").val() + "')");
+    var han = $("#han").val();
+    var dups = $(".col-han").filter(function() { return $(this).text() === han });
     if (dups.length > 0) {
       var val = (col) => dups.eq(0).parent().find(".col-" + col).text();
       var dup_id = val("id");
