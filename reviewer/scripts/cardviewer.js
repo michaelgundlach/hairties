@@ -43,6 +43,7 @@ CardViewer.__proto__ = {
   },
 
   _closeReviewer: function() {
+    this._current.cards = [];
     $(".reviewer").hide();
     $(".packsviewer").show();
   },
@@ -78,6 +79,10 @@ CardViewer.__proto__ = {
     }
   },
 
+
+  reviewing: function() {
+    return this._current.cards.length > 0;
+  },
 
   // quasi-global to hold info about our current study session.
   _current: {
@@ -207,8 +212,11 @@ CardViewer.__proto__ = {
 $(function() {
   $(window).on("popstate", () => CardViewer._closeReviewer());
 
-  var hammertime = new Hammer(document.querySelector(".card"));
+  var hammertime = new Hammer(document.querySelector("body"));
   hammertime.on('swipe', function(ev) {
+    if (!CardViewer.reviewing()) {
+      return;
+    }
     if (ev.direction === 4) {
       CardViewer._reviewPreviousCard();
     } else if (ev.direction === 2) {
