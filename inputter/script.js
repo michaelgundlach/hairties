@@ -45,7 +45,7 @@ $(function() {
 
   $("#add").click(function() {
     // Make sure we don't already have it
-    var han = $("#han").val();
+    var han = $("#han").val().trim();
     var dups = $(".col-han").filter(function() { return $(this).text() === han });
     if (dups.length > 0) {
       var val = (col) => dups.eq(0).parent().find(".col-" + col).text();
@@ -57,10 +57,10 @@ $(function() {
     }
     $("#dup_warning").text("");
     var card = {
-      han: $("#han").val(),
-      pinyin: prettify_pinyin($("#pinyin").val()),
-      english: $("#english").val(),
-      pack_name: $("#pack_name").val(),
+      han: $("#han").val().trim(),
+      pinyin: prettify_pinyin($("#pinyin").val().trim()),
+      english: $("#english").val().trim(),
+      pack_name: $("#pack_name").val().trim(),
       errors: []
     };
     Cards.api.add(card, function(newCard) {
