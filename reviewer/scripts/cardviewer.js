@@ -21,6 +21,11 @@ CardViewer.__proto__ = {
     this._reviewNextCard();
   },
 
+  _reviewPreviousCard: function() {
+    this._current.i -= 2;
+    this._reviewNextCard();
+  },
+
   // Display a card number |i| in the reviewer.
   _reviewNextCard: function() {
     this._current.i += 1;
@@ -201,6 +206,15 @@ CardViewer.__proto__ = {
 
 $(function() {
   $(window).on("popstate", () => CardViewer._closeReviewer());
+
+  var hammertime = new Hammer(document.querySelector(".card"));
+  hammertime.on('swipe', function(ev) {
+    if (ev.direction === 4) {
+      CardViewer._reviewPreviousCard();
+    } else if (ev.direction === 2) {
+      CardViewer._reviewNextCard();
+    }
+  });
   $(".controls-reveal-all").click(function() {
     $(".obscured").click();
   });
