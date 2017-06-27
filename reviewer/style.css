@@ -115,7 +115,7 @@ html,body {
 {
   background: #cc3434;
 }
-[data-answer] {
+.obscured, .revealed {
   background: white;
 }
 #face-hint {
@@ -180,21 +180,29 @@ html,body {
   font-size: 10vh;
 }
 
-/* color and height of obscured/unobscured stuff */
-[data-answer] {
+/* Obscured faces are rounded, and dashed until revealed */
+.obscured, .revealed {
   height: 8vh;
+  border-radius: 1vh;
 }
-
-/* obscured stuff is marked thus */
 .face.obscured {
   border: .8vw dashed black;
-  border-radius: 1vh;
-  font-style: italic;
 }
-/* revealed stuff looks like this */
-.face:not(.obscured)[data-answer] {
-  border: .8vw dashed white;
-  border-radius: 1vh;
+.face.revealed {
+  border: .8vw dashed transparent;
+}
+
+/* Obscured faces get one text, revealed get another */
+.obscured .obscured-clue, .revealed .face-content {
+  display: inline;
+}
+.revealed .obscured-clue, .obscured .face-content {
+  display: none;
+}
+
+/* clues are styled thus */
+.obscured-clue {
+  font-style: italic;
 }
 
 /* Faces have spaces around them */
@@ -203,7 +211,7 @@ html,body {
   width: 80%;
 }
 
-/* Warning is rounded, italic, and a little taller */
+/* Warning is styled thus */
 #face-hint {
   border-radius: 1vh;
   height: 6vh;
@@ -221,3 +229,11 @@ html,body {
   right: 0vh;
   top: 0vw;
 }
+
+/* Han colorization */
+.tone-1 { color: red; }
+.tone-2 { color: yellow; }
+.tone-3 { color: green; }
+.tone-4 { color: blue; }
+.tone-5 { color: black; }
+.tone-broken { color: gray; }

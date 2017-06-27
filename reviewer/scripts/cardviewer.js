@@ -127,21 +127,34 @@ CardViewer.__proto__ = {
       $top.prepend(this._newFace(hint, "face-hint"));
     },
 
-    // If answer is not undefined, returns a .obscured face with the data-answer element
-    // containing the answer.
-    // <div class="face obscured" id="face-pinyin" data-answer="hao">pinyin</div>
-    _newFace: function(text, id, answer) {
+    // Returns either
+    //      <div class="face" id="face-pinyin">
+    //        <span class="face-content">hǎo</span>
+    //      </div>
+    // or, if |answer| is specified,
+    //      <div class="face obscured" id="face-pinyin">
+    //        <span class="obscured-clue">pinyin</span>
+    //        <span class="face-content">hǎo</span>
+    //      </div>
+    // "obscured" class becomes "revealed" when the answer is revealed.
+    _newFace: function(content, id, answer) {
       var face = $("<div>", {
         "class": "face",
-        text: text,
         id: id
       });
-      if (answer !== undefined) {
+      if (!answer) {
+        face.
+          append($("<span>", { "class": "face-content",  text: content }));
+      } else {
         face.
           addClass("obscured").
-          attr("data-answer", answer).
+          append($("<span>", { "class": "obscured-clue", text: content })).
+          append($("<span>", { "class": "face-content",  text: answer })).
           click(function() {
-            face.removeClass("obscured").text(answer);
+            face.removeClass("obscured").addClass("revealed");
+            if (id === "face-pinyin") {
+              CardViewer._colorizeHan();
+            }
             // If all obscureds have been manually clicked, it's like you
             // clicked "Reveal All".  Go ahead and show right/wrong buttons
             if ($(".obscured").length === 0) {
@@ -151,6 +164,37 @@ CardViewer.__proto__ = {
       }
       return face;
     }
+  },
+
+  _colorizeHan: function() {
+    var hanFace = $("#face-han .face-content");
+    var han = hanFace.text().split('');
+    var pinyin = $("#face-pinyin .face-content").text().split(' ');
+    hanFace.html("");
+    for (var i = 0; i < han.length; i++) {
+      if (!pinyin[i]) {
+        hanFace.addClass("tone-broken").text(han.join(''));
+        return;
+      }
+      var tone = this._toneNumberForPinyin(pinyin[i]);
+      $("<span>", { "class": "tone-" + tone, text: han[i] }).appendTo(hanFace);
+    }
+  },
+
+  _toneNumberForPinyin: function(word) {
+    var tones = {
+      'ā': 1, 'á': 2, 'ǎ': 3, 'à': 4,
+      'ē': 1, 'é': 2, 'ě': 3, 'è': 4,
+      'ū': 1, 'ú': 2, 'ǔ': 3, 'ù': 4,
+      'ī': 1, 'í': 2, 'ǐ': 3, 'ì': 4,
+      'ō': 1, 'ó': 2, 'ǒ': 3, 'ò': 4,
+      'ǖ': 1, 'ǘ': 2, 'ǚ': 3, 'ǜ': 4
+    };
+    for (var i = 0; i < word.length; i++) {
+      if (tones[word[i]])
+        return tones[word[i]];
+    }
+    return 5;
   }
 
 };
