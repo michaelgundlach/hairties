@@ -163,7 +163,7 @@ CardViewer.__proto__ = {
           click(function() {
             face.removeClass("obscured").addClass("revealed");
             if (id === "face-pinyin") {
-              CardViewer._colorizeHan();
+              CardViewer._colorizeByTone();
             }
             // If all obscureds have been manually clicked, it's like you
             // clicked "Reveal All".  Go ahead and show right/wrong buttons
@@ -176,18 +176,22 @@ CardViewer.__proto__ = {
     }
   },
 
-  _colorizeHan: function() {
+  _colorizeByTone: function() {
     var hanFace = $("#face-han .face-content");
+    var pinyinFace = $("#face-pinyin .face-content");
     var han = hanFace.text().split('');
-    var pinyin = $("#face-pinyin .face-content").text().split(' ');
+    var pinyin = pinyinFace.text().split(' ');
     hanFace.html("");
+    pinyinFace.html("");
     for (var i = 0; i < han.length; i++) {
       if (!pinyin[i]) {
         hanFace.addClass("tone-broken").text(han.join(''));
+        pinyinFace.addClass("tone-broken").text(pinyin.join(' '));
         return;
       }
       var tone = this._toneNumberForPinyin(pinyin[i]);
       $("<span>", { "class": "tone-" + tone, text: han[i] }).appendTo(hanFace);
+      $("<span>", { "class": "tone-" + tone, text: pinyin[i] + " "}).appendTo(pinyinFace);
     }
   },
 

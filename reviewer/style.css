@@ -231,9 +231,9 @@ html,body {
 }
 
 /* Han colorization */
-.tone-1 { color: red; }
-.tone-2 { color: yellow; }
-.tone-3 { color: green; }
+.tone-1 { color: #ec0000; }
+.tone-2 { color: #ecec00; }
+.tone-3 { color: #00ec00; }
 .tone-4 { color: blue; }
 .tone-5 { color: black; }
 .tone-broken { color: gray; }
