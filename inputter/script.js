@@ -43,6 +43,21 @@ $(function() {
     });
   });
 
+  // When the user hits a number, replace the last syllable with pinyin.
+  // Then stick in an invisible marker so we can find the start of the next
+  // syllable later.  (The first time, we stick in an invisible marker at the
+  // very front.)
+  $("#pinyin").keyup(function(e) {
+    if (!isNaN(e.key)) {
+      var pinyin = $("#pinyin").val();
+      if (pinyin.indexOf("\u200b") === -1)
+        pinyin = "\u200b" + pinyin;
+      var recentText = pinyin.match(/\u200b(.*$)/)[1];
+      var newText = prettify_pinyin(recentText) + "\u200b";
+      $("#pinyin").val(pinyin.replace(/\u200b.*/, newText));
+    }
+  });
+
   $("#add").click(function() {
     // Make sure we don't already have it
     var han = $("#han").val().trim();
@@ -56,6 +71,8 @@ $(function() {
       return;
     }
     $("#dup_warning").text("");
+    // Pinyin has \u200b hiding in it as part of helping convert to tone marks
+    $("#pinyin").val($("#pinyin").val().replace(/\u200b/, ""));
     var card = {
       han: $("#han").val().trim(),
       pinyin: prettify_pinyin($("#pinyin").val().trim()),
