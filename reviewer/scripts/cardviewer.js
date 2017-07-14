@@ -179,38 +179,35 @@ CardViewer.__proto__ = {
   _colorizeByTone: function() {
     var hanFace = $("#face-han .face-content");
     var pinyinFace = $("#face-pinyin .face-content");
+    var han_to_ignore = {"，": 1, "__": 1, "／": 1, "!": 1, "＿": 1, "？": 1, "；": 1, "：": 1, "(": 1, ")": 1, "。": 1, "、": 1, "《": 1, "》": 1, "「": 1, "」": 1};
     var han = hanFace.text().split('');
-    var pinyin = pinyinFace.text().split(' ');
+    var pinyin = pinyinFace.text();
+    var tones_in_pinyin = tonesInPinyin(pinyin);
+    var han_length = han.filter(h=>!(h in han_to_ignore)).length;
+    if (tones_in_pinyin.length != han_length) {
+      hanFace.addClass("tone-broken");
+      pinyinFace.addClass("tone-broken");
+      return;
+    }
     hanFace.html("");
     pinyinFace.html("");
+    var pinyin_count = 0;
     for (var i = 0; i < han.length; i++) {
-      if (!pinyin[i]) {
-        hanFace.addClass("tone-broken").text(han.join(''));
-        pinyinFace.addClass("tone-broken").text(pinyin.join(' '));
-        return;
+      if (han[i] in han_to_ignore) {
+        $("<span>", { text: han[i] }).appendTo(hanFace);
+        continue;
       }
-      var tone = this._toneNumberForPinyin(pinyin[i]);
+      var tone = tones_in_pinyin[pinyin_count][1];
       $("<span>", { "class": "tone-" + tone, text: han[i] }).appendTo(hanFace);
-      $("<span>", { "class": "tone-" + tone, text: pinyin[i] + " "}).appendTo(pinyinFace);
+      $("<span>", { "class": "tone-" + tone, text: tones_in_pinyin[pinyin_count][0]}).appendTo(pinyinFace);
+      pinyin_count++;
     }
-  },
-
-  _toneNumberForPinyin: function(word) {
-    var tones = {
-      'ā': 1, 'á': 2, 'ǎ': 3, 'à': 4,
-      'ē': 1, 'é': 2, 'ě': 3, 'è': 4,
-      'ū': 1, 'ú': 2, 'ǔ': 3, 'ù': 4,
-      'ī': 1, 'í': 2, 'ǐ': 3, 'ì': 4,
-      'ō': 1, 'ó': 2, 'ǒ': 3, 'ò': 4,
-      'ǖ': 1, 'ǘ': 2, 'ǚ': 3, 'ǜ': 4
-    };
-    for (var i = 0; i < word.length; i++) {
-      if (tones[word[i]])
-        return tones[word[i]];
-    }
-    return 5;
+    // Now that the han face has a bunch of spans in it instead of one string
+    // of text, it has forgotten how to wrap.  We could separate the spans, but
+    // then they'd always have a space between each one.  Flexbox to the
+    // rescue.
+    hanFace.css("display", "flex").css("flex-wrap", "wrap");
   }
-
 };
 
 $(function() {

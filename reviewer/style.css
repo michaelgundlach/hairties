@@ -248,6 +248,4 @@ html,body {
 .tone-3 { color: #00ec00; }
 .tone-4 { color: blue; }
 .tone-5 { color: black; }
-/* We can't easily break wen4ti2 into two words if there is no space, so
- * if everything's broken just keep the text black. */
-.tone-broken { color: black; }
+.tone-broken { color: gray; }
