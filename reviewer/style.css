@@ -137,6 +137,8 @@ html,body {
 .card {
   display: flex; flex-flow: column;
 }
+/* TODO: actually, this doesn't seem to work.  The two halfs
+ * grow or shrink depending on content. */
 .card-top-half {
   flex-grow: 6;
 }
@@ -181,14 +183,18 @@ html,body {
   justify-content: center;
 }
 
-/* Basic faces on top half are bigger */
-.card-top-half .basic {
-  font-size: 10vh;
+/* Han faces on top half are bigger */
+.card-top-half #face-han {
+  font-size: 8vh;
+}
+/* English faces on top half are somewhat bigger */
+.card-top-half #face-english {
+  font-size: 5vh;
 }
 
 /* Obscured faces are rounded, and dashed until revealed */
 .obscured, .revealed {
-  height: 8vh;
+  min-height: 8vh;
   border-radius: 1vh;
 }
 .face.obscured {
