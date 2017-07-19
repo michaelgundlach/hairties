@@ -20,7 +20,7 @@ function tonesInPinyin(pinyin) {
       'ǖ': 1, 'ǘ': 2, 'ǚ': 3, 'ǜ': 4,
       '1': 1, '2': 2, '3': 3, '4': 4, '5': 5
     };
-  var syllable_re = /([BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz]|sh|zh|ch|Sh|Zh|Ch)+[aeiouüāáǎàēéěèūúǔùīíǐìōóǒòǖǘǚǜ]{1,2}(n?g?)[^bcdfghjklmnpqrstvwxyzaeiouüāáǎàēéěèūúǔùīíǐìōóǒòǖǘǚǜ]*/g;
+  var syllable_re = /([BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz]|sh|zh|ch|Sh|Zh|Ch)+[aeiouüāáǎàēéěèūúǔùīíǐìōóǒòǖǘǚǜ]{1,3}(n?g?)[^bcdfghjklmnpqrstvwxyzaeiouüāáǎàēéěèūúǔùīíǐìōóǒòǖǘǚǜ]*/g;
   var syllables = pinyin.match(syllable_re);
   var syllables_and_tones = syllables.map(syl => {
     var syl_tones = syl.split('').map(c=>tones[c]).filter(c=>c);
