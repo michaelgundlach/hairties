@@ -1,7 +1,7 @@
 Cards = {
 
   api: {
-    _root: "http://hairties.sorryrobot.com/api/cards/",
+    _root: "https://hairties.sorryrobot.com/api/cards/",
 
     // Call callback(cards) with a list of all cards.
     get_all: function(callback) {
